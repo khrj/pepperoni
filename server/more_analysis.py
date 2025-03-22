@@ -822,8 +822,10 @@ def save_analysis_to_json(analysis_data, output_file):
 # Example usage
 if __name__ == "__main__":
     # Replace with actual file paths
-    pcap_file = "capture.pcapng"
-    baseline_file = "baseline.pcapng"  # Optional
+    import sys
+
+    pcap_file = sys.argv[1]
+    baseline_file = sys.argv[2]
 
     # Run complete analysis
     analysis = analyze_pcap(pcap_file, baseline_file)
