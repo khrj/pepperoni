@@ -3,7 +3,7 @@
 import { AlertCircle, AlertTriangle, Info } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts"
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts"
 
 // Dummy insights data
 const insightsData = {
@@ -105,68 +105,102 @@ export default function InsightsPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold mb-2">Delay Insights</h1>
-        <p className="text-muted-foreground">Automated analysis of delay patterns and anomalies</p>
-      </div>
+		<div className="space-y-6">
+			<div>
+				<h1 className="text-2xl font-bold mb-2">Delay Insights</h1>
+				<p className="text-muted-foreground">
+					Automated analysis of delay patterns and anomalies
+				</p>
+			</div>
 
-      <div className="space-y-4">
-        {insightsData.insights.map((insight) => (
-          <div key={insight.id} className={`border rounded-lg p-4 ${getSeverityColor(insight.severity)}`}>
-            <div className="flex items-start gap-3">
-              {getSeverityIcon(insight.type)}
-              <div className="flex-1">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold">{insight.title}</h3>
-                  <div className="flex gap-2">
-                    <Badge className={getSeverityBadge(insight.severity)}>
-                      {insight.severity === "critical"
-                        ? "Critical"
-                        : insight.severity === "high"
-                          ? "High Impact"
-                          : insight.severity === "medium"
-                            ? "Medium Impact"
-                            : "Low Impact"}
-                    </Badge>
-                    <Badge variant="outline">{insight.impact}</Badge>
-                  </div>
-                </div>
-                <p className="mt-1">{insight.description}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+			<div className="space-y-4">
+				{insightsData.insights.map(insight => (
+					<div
+						key={insight.id}
+						className={`border rounded-lg p-4 ${getSeverityColor(
+							insight.severity
+						)}`}
+					>
+						<div className="flex items-start gap-3">
+							{getSeverityIcon(insight.type)}
+							<div className="flex-1">
+								<div className="flex items-center justify-between">
+									<h3 className="text-lg font-semibold">
+										{insight.title}
+									</h3>
+									<div className="flex gap-2">
+										<Badge
+											className={getSeverityBadge(
+												insight.severity
+											)}
+										>
+											{insight.severity === "critical"
+												? "Critical"
+												: insight.severity === "high"
+												? "High Impact"
+												: insight.severity === "medium"
+												? "Medium Impact"
+												: "Low Impact"}
+										</Badge>
+										<Badge variant="outline">
+											{insight.impact}
+										</Badge>
+									</div>
+								</div>
+								<p className="mt-1">{insight.description}</p>
+							</div>
+						</div>
+					</div>
+				))}
+			</div>
 
-      <div>
-        <h2 className="text-xl font-bold mb-4">Root Cause Analysis</h2>
-        <div className="grid gap-4 md:grid-cols-2">
-          {insightsData.correlations.map((correlation) => (
-            <Card key={correlation.id}>
-              <CardHeader>
-                <CardTitle>{correlation.title}</CardTitle>
-                <CardDescription>{correlation.description}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <BarChart
-                  width={400}
-                  height={300}
-                  data={correlation.data}
-                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey={correlation.id === 1 ? "size" : "protocol"} />
-                  <YAxis label={{ value: "Delay (ms)", angle: -90, position: "insideLeft" }} />
-                  <Tooltip />
-                  <Bar dataKey="delay" fill="#f4735b" />
-                </BarChart>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-    </div>
+			<div>
+				<h2 className="text-xl font-bold mb-4">Root Cause Analysis</h2>
+				<div className="grid gap-4 md:grid-cols-2">
+					{insightsData.correlations.map(correlation => (
+						<Card key={correlation.id}>
+							<CardHeader>
+								<CardTitle>{correlation.title}</CardTitle>
+								<CardDescription>
+									{correlation.description}
+								</CardDescription>
+							</CardHeader>
+							<CardContent>
+								<ResponsiveContainer width="100%" height={300}>
+									<BarChart
+										data={correlation.data}
+										margin={{
+											top: 5,
+											right: 30,
+											left: 20,
+											bottom: 5,
+										}}
+									>
+										<CartesianGrid strokeDasharray="3 3" />
+										<XAxis
+											dataKey={
+												correlation.id === 1
+													? "size"
+													: "protocol"
+											}
+										/>
+										<YAxis
+											label={{
+												value: "Delay (ms)",
+												angle: -90,
+												position: "insideLeft",
+											}}
+										/>
+										<Tooltip />
+										<Bar dataKey="delay" fill="#f4735b" />
+									</BarChart>
+								</ResponsiveContainer>
+							</CardContent>
+						</Card>
+					))}
+				</div>
+			</div>
+		</div>
   )
 }
 
