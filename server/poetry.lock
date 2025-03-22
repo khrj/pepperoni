@@ -13,6 +13,18 @@ files = [
 ]
 
 [[package]]
+name = "dpkt"
+version = "1.9.8"
+description = "fast, simple packet creation / parsing, with definitions for the basic TCP/IP protocols"
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "dpkt-1.9.8-py3-none-any.whl", hash = "sha256:4da4d111d7bf67575b571f5c678c71bddd2d8a01a3d57d489faf0a92c748fbfd"},
+    {file = "dpkt-1.9.8.tar.gz", hash = "sha256:43f8686e455da5052835fd1eda2689d51de3670aac9799b1b00cfd203927ee45"},
+]
+
+[[package]]
 name = "lxml"
 version = "5.3.1"
 description = "Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API."
@@ -414,4 +426,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12"
-content-hash = "fb1a4ed958c684955c50994e84c646f2cb5c16e1831ce8159caa5b98cbde7d42"
+content-hash = "1d8ee88b74455e8d35a2b464c04a34e5fe4c7226025f009c880fd54c9f572272"
