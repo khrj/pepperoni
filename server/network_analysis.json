@@ -1,0 +1,1144 @@
+{
+  "summaryData": {
+    "avgLatency": 3,
+    "packetLoss": 37.8,
+    "jitter": 5,
+    "baseline": {
+      "avgLatency": 3,
+      "packetLoss": 37.8,
+      "jitter": 5
+    }
+  },
+  "protocolDistribution": [
+    {
+      "name": "TCP",
+      "value": 62
+    },
+    {
+      "name": "MQTT",
+      "value": 38
+    },
+    {
+      "name": "DNS",
+      "value": 0
+    }
+  ],
+  "delayCategories": [
+    {
+      "name": "Retransmission",
+      "value": 38
+    },
+    {
+      "name": "Bundling Delay",
+      "value": 33
+    },
+    {
+      "name": "Network",
+      "value": 20
+    },
+    {
+      "name": "Broker Processing",
+      "value": 10
+    }
+  ],
+  "latencyTrends": [
+    {
+      "time": "20:20",
+      "mqtt": 0,
+      "tcp": 5
+    }
+  ],
+  "delayTimeline": [
+    {
+      "time": "20:20",
+      "mqtt": 0,
+      "tcp": 5
+    }
+  ],
+  "insightsData": {
+    "insights": [
+      {
+        "id": 2,
+        "title": "Retransmission Spikes",
+        "description": "Multiple retransmission events detected between 20:20-20:23, indicating network congestion or packet loss. This is causing delays of up to 0.4s for affected packets.",
+        "severity": "critical",
+        "impact": "Affects 33% of packets",
+        "type": "error"
+      },
+      {
+        "id": 3,
+        "title": "Bundle Size Optimization",
+        "description": "Current bundle size (avg. 24 packets) is causing unnecessary delays. Analysis suggests optimal bundle size of 12-15 packets would reduce latency by approximately 40%.",
+        "severity": "medium",
+        "impact": "Recommendation",
+        "type": "recommendation"
+      }
+    ],
+    "correlations": [
+      {
+        "id": 1,
+        "title": "Packet Size vs Delay",
+        "description": "Strong positive correlation (r=-0.92) between packet size and processing delay",
+        "data": [
+          {
+            "size": "64",
+            "delay": 4
+          },
+          {
+            "size": "128",
+            "delay": 5
+          },
+          {
+            "size": "256",
+            "delay": 3
+          },
+          {
+            "size": "512",
+            "delay": 1
+          },
+          {
+            "size": "1024",
+            "delay": 0
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Protocol vs Delay",
+        "description": "Delay variations observed across different protocols and QoS levels",
+        "data": [
+          {
+            "protocol": "MQTT QoS 0",
+            "delay": 0
+          },
+          {
+            "protocol": "MQTT QoS 1",
+            "delay": 0
+          },
+          {
+            "protocol": "TCP",
+            "delay": 5
+          },
+          {
+            "protocol": "MQTT QoS 2",
+            "delay": 0
+          },
+          {
+            "protocol": "OTHER",
+            "delay": 1
+          },
+          {
+            "protocol": "MQTT QoS 3",
+            "delay": 0
+          },
+          {
+            "protocol": "DNS",
+            "delay": 1
+          }
+        ]
+      }
+    ]
+  },
+  "packetData": [
+    {
+      "id": 1,
+      "timestamp": "20:20:54.002",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "TCP",
+      "size": 96,
+      "delay": 39,
+      "delayCategory": "Network Transmission"
+    },
+    {
+      "id": 2,
+      "timestamp": "20:20:54.016",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 3,
+      "timestamp": "20:20:54.016",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 4,
+      "timestamp": "20:20:54.016",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 5,
+      "timestamp": "20:20:54.016",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Broker Processing"
+    },
+    {
+      "id": 6,
+      "timestamp": "20:20:54.016",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 7,
+      "timestamp": "20:20:54.016",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Broker Processing"
+    },
+    {
+      "id": 8,
+      "timestamp": "20:20:54.016",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 9,
+      "timestamp": "20:20:54.016",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 10,
+      "timestamp": "20:20:54.016",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 11,
+      "timestamp": "20:20:54.016",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 12,
+      "timestamp": "20:20:54.016",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 13,
+      "timestamp": "20:20:54.016",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "TCP",
+      "size": 1514,
+      "delay": 181,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 14,
+      "timestamp": "20:20:54.016",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 15,
+      "timestamp": "20:20:54.016",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 16,
+      "timestamp": "20:20:54.016",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Broker Processing"
+    },
+    {
+      "id": 17,
+      "timestamp": "20:20:54.016",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Broker Processing"
+    },
+    {
+      "id": 18,
+      "timestamp": "20:20:54.016",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Broker Processing"
+    },
+    {
+      "id": 19,
+      "timestamp": "20:20:54.016",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "TCP",
+      "size": 1514,
+      "delay": 181,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 20,
+      "timestamp": "20:20:54.016",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 21,
+      "timestamp": "20:20:54.016",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 22,
+      "timestamp": "20:20:54.016",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 23,
+      "timestamp": "20:20:54.016",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 24,
+      "timestamp": "20:20:54.016",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Broker Processing"
+    },
+    {
+      "id": 25,
+      "timestamp": "20:20:54.017",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 26,
+      "timestamp": "20:20:54.017",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "TCP",
+      "size": 1514,
+      "delay": 181,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 27,
+      "timestamp": "20:20:54.017",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 28,
+      "timestamp": "20:20:54.017",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 29,
+      "timestamp": "20:20:54.017",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "TCP",
+      "size": 1514,
+      "delay": 181,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 30,
+      "timestamp": "20:20:54.017",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "TCP",
+      "size": 1514,
+      "delay": 181,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 31,
+      "timestamp": "20:20:54.017",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 32,
+      "timestamp": "20:20:54.017",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "TCP",
+      "size": 1514,
+      "delay": 181,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 33,
+      "timestamp": "20:20:54.017",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 34,
+      "timestamp": "20:20:54.017",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 35,
+      "timestamp": "20:20:54.017",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 36,
+      "timestamp": "20:20:54.017",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 37,
+      "timestamp": "20:20:54.017",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 38,
+      "timestamp": "20:20:54.017",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 39,
+      "timestamp": "20:20:54.017",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 40,
+      "timestamp": "20:20:54.017",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Broker Processing"
+    },
+    {
+      "id": 41,
+      "timestamp": "20:20:54.017",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 42,
+      "timestamp": "20:20:54.017",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 43,
+      "timestamp": "20:20:54.017",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 44,
+      "timestamp": "20:20:54.017",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "TCP",
+      "size": 1514,
+      "delay": 181,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 45,
+      "timestamp": "20:20:54.017",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 46,
+      "timestamp": "20:20:54.017",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 47,
+      "timestamp": "20:20:54.017",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 48,
+      "timestamp": "20:20:54.034",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 49,
+      "timestamp": "20:20:54.038",
+      "source": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "destination": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "protocol": "TCP",
+      "size": 74,
+      "delay": 37,
+      "delayCategory": "Network Transmission"
+    },
+    {
+      "id": 50,
+      "timestamp": "20:20:54.038",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 51,
+      "timestamp": "20:20:54.038",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 52,
+      "timestamp": "20:20:54.038",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Broker Processing"
+    },
+    {
+      "id": 53,
+      "timestamp": "20:20:54.038",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 54,
+      "timestamp": "20:20:54.038",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 55,
+      "timestamp": "20:20:54.038",
+      "source": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "destination": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "protocol": "TCP",
+      "size": 74,
+      "delay": 37,
+      "delayCategory": "Retransmissions"
+    },
+    {
+      "id": 56,
+      "timestamp": "20:20:54.038",
+      "source": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "destination": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "protocol": "TCP",
+      "size": 74,
+      "delay": 37,
+      "delayCategory": "Retransmissions"
+    },
+    {
+      "id": 57,
+      "timestamp": "20:20:54.038",
+      "source": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "destination": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "protocol": "TCP",
+      "size": 74,
+      "delay": 37,
+      "delayCategory": "Retransmissions"
+    },
+    {
+      "id": 58,
+      "timestamp": "20:20:54.038",
+      "source": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "destination": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "protocol": "TCP",
+      "size": 74,
+      "delay": 37,
+      "delayCategory": "Retransmissions"
+    },
+    {
+      "id": 59,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "destination": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "protocol": "TCP",
+      "size": 74,
+      "delay": 37,
+      "delayCategory": "Retransmissions"
+    },
+    {
+      "id": 60,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "destination": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "protocol": "TCP",
+      "size": 74,
+      "delay": 37,
+      "delayCategory": "Retransmissions"
+    },
+    {
+      "id": 61,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 62,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Broker Processing"
+    },
+    {
+      "id": 63,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 64,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 65,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Broker Processing"
+    },
+    {
+      "id": 66,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 67,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "TCP",
+      "size": 1514,
+      "delay": 181,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 68,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 69,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Broker Processing"
+    },
+    {
+      "id": 70,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 71,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Broker Processing"
+    },
+    {
+      "id": 72,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Broker Processing"
+    },
+    {
+      "id": 73,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 74,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 75,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 76,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "TCP",
+      "size": 1514,
+      "delay": 181,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 77,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 78,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 79,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Broker Processing"
+    },
+    {
+      "id": 80,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 81,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 82,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 83,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "destination": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "protocol": "TCP",
+      "size": 74,
+      "delay": 37,
+      "delayCategory": "Retransmissions"
+    },
+    {
+      "id": 84,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "destination": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "protocol": "TCP",
+      "size": 74,
+      "delay": 37,
+      "delayCategory": "Retransmissions"
+    },
+    {
+      "id": 85,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "destination": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "protocol": "TCP",
+      "size": 74,
+      "delay": 37,
+      "delayCategory": "Retransmissions"
+    },
+    {
+      "id": 86,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "destination": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "protocol": "TCP",
+      "size": 74,
+      "delay": 37,
+      "delayCategory": "Retransmissions"
+    },
+    {
+      "id": 87,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "destination": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "protocol": "TCP",
+      "size": 74,
+      "delay": 37,
+      "delayCategory": "Retransmissions"
+    },
+    {
+      "id": 88,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "destination": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "protocol": "TCP",
+      "size": 74,
+      "delay": 37,
+      "delayCategory": "Retransmissions"
+    },
+    {
+      "id": 89,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "destination": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "protocol": "TCP",
+      "size": 74,
+      "delay": 37,
+      "delayCategory": "Retransmissions"
+    },
+    {
+      "id": 90,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "destination": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "protocol": "TCP",
+      "size": 74,
+      "delay": 37,
+      "delayCategory": "Retransmissions"
+    },
+    {
+      "id": 91,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "destination": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "protocol": "TCP",
+      "size": 74,
+      "delay": 37,
+      "delayCategory": "Retransmissions"
+    },
+    {
+      "id": 92,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "destination": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "protocol": "TCP",
+      "size": 74,
+      "delay": 37,
+      "delayCategory": "Retransmissions"
+    },
+    {
+      "id": 93,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "destination": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "protocol": "TCP",
+      "size": 74,
+      "delay": 37,
+      "delayCategory": "Retransmissions"
+    },
+    {
+      "id": 94,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "destination": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "protocol": "TCP",
+      "size": 74,
+      "delay": 37,
+      "delayCategory": "Retransmissions"
+    },
+    {
+      "id": 95,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "destination": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "protocol": "TCP",
+      "size": 74,
+      "delay": 37,
+      "delayCategory": "Retransmissions"
+    },
+    {
+      "id": 96,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "destination": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "protocol": "TCP",
+      "size": 74,
+      "delay": 37,
+      "delayCategory": "Retransmissions"
+    },
+    {
+      "id": 97,
+      "timestamp": "20:20:54.039",
+      "source": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "destination": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "protocol": "TCP",
+      "size": 74,
+      "delay": 37,
+      "delayCategory": "Retransmissions"
+    },
+    {
+      "id": 98,
+      "timestamp": "20:20:54.042",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 99,
+      "timestamp": "20:20:54.042",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    },
+    {
+      "id": 100,
+      "timestamp": "20:20:54.042",
+      "source": "2401:4900:562c:ff78:bff5:8f7a:1519:b18d:5900",
+      "destination": "2401:4900:562c:ff78:888c:293f:19ee:6799:49910",
+      "protocol": "MQTT",
+      "size": 1514,
+      "delay": 201,
+      "delayCategory": "Bundling Delay"
+    }
+  ]
+}

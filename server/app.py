@@ -1,4 +1,13 @@
-import dpkt
+import os
+import tempfile
+from fastapi import FastAPI, File, UploadFile, Form, HTTPException
+from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
+from typing import Optional
+
+# Import the analysis functions from the provided code
+from dpkt import dpkt
 import socket
 import datetime
 from collections import Counter, defaultdict
@@ -731,6 +740,7 @@ def process_pcap(file_path):
 
     return packets
 
+
 def get_packet_data(packets, limit=100):
     """
     Format packet data for display
@@ -844,18 +854,115 @@ def save_analysis_to_json(analysis_data, output_file):
         json.dump(analysis_data, f, indent=2)
 
 
-# Example usage
+# Create FastAPI app
+app = FastAPI(
+    title="Network Packet Analyzer API",
+    description="API for analyzing network packet captures (PCAP files)",
+    version="1.0.0",
+)
+
+# Add CORS middleware to allow cross-origin requests
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.get("/")
+async def root():
+    return {
+        "message": "Welcome to the Network Packet Analyzer API. Use POST /analyze to analyze a PCAP file."
+    }
+
+
+@app.post("/analyze")
+async def analyze_pcap_file(
+    pcap_file: UploadFile = File(...), baseline_file: Optional[UploadFile] = None
+):
+    """
+    Analyze a PCAP file and return the results as JSON.
+
+    - **pcap_file**: The PCAP file to analyze
+    - **baseline_file**: Optional baseline PCAP file for comparison
+    """
+    try:
+        # Create temporary files to store the uploaded files
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pcap") as temp_pcap:
+            temp_pcap.write(await pcap_file.read())
+            pcap_path = temp_pcap.name
+
+        baseline_path = None
+        if baseline_file:
+            with tempfile.NamedTemporaryFile(
+                delete=False, suffix=".pcap"
+            ) as temp_baseline:
+                temp_baseline.write(await baseline_file.read())
+                baseline_path = temp_baseline.name
+
+        # Analyze the PCAP file
+        analysis_results = analyze_pcap(pcap_path, baseline_path)
+
+        # Clean up temporary files
+        os.unlink(pcap_path)
+        if baseline_path:
+            os.unlink(baseline_path)
+
+        return JSONResponse(content=analysis_results)
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Error analyzing PCAP file: {str(e)}"
+        )
+
+
+@app.post("/save-analysis")
+async def save_analysis(
+    pcap_file: UploadFile = File(...),
+    output_filename: str = Form("network_analysis.json"),
+    baseline_file: Optional[UploadFile] = None,
+):
+    """
+    Analyze a PCAP file and save the results to a JSON file.
+
+    - **pcap_file**: The PCAP file to analyze
+    - **output_filename**: Name of the output JSON file
+    - **baseline_file**: Optional baseline PCAP file for comparison
+    """
+    try:
+        # Create temporary files to store the uploaded files
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pcap") as temp_pcap:
+            temp_pcap.write(await pcap_file.read())
+            pcap_path = temp_pcap.name
+
+        baseline_path = None
+        if baseline_file:
+            with tempfile.NamedTemporaryFile(
+                delete=False, suffix=".pcap"
+            ) as temp_baseline:
+                temp_baseline.write(await baseline_file.read())
+                baseline_path = temp_baseline.name
+
+        # Analyze the PCAP file
+        analysis_results = analyze_pcap(pcap_path, baseline_path)
+
+        # Save the analysis results to a JSON file
+        save_analysis_to_json(analysis_results, output_filename)
+
+        # Clean up temporary files
+        os.unlink(pcap_path)
+        if baseline_path:
+            os.unlink(baseline_path)
+
+        return {"message": f"Analysis complete! Results saved to {output_filename}"}
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Error analyzing PCAP file: {str(e)}"
+        )
+
+
 if __name__ == "__main__":
-    # Replace with actual file paths
-    import sys
-
-    pcap_file = sys.argv[1]
-    baseline_file = sys.argv[2]
-
-    # Run complete analysis
-    analysis = analyze_pcap(pcap_file, baseline_file)
-
-    # Save to JSON
-    save_analysis_to_json(analysis, "network_analysis.json")
-
-    print("Analysis complete! Results saved to network_analysis.json")
+    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
