@@ -7,7 +7,7 @@ import uvicorn
 from typing import Optional
 
 # Import the analysis functions from the provided code
-from dpkt import dpkt
+import dpkt
 import socket
 import datetime
 from collections import Counter, defaultdict
@@ -890,14 +890,14 @@ async def analyze_pcap_file(
     """
     try:
         # Create temporary files to store the uploaded files
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".pcap") as temp_pcap:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pcapng") as temp_pcap:
             temp_pcap.write(await pcap_file.read())
             pcap_path = temp_pcap.name
 
         baseline_path = None
         if baseline_file:
             with tempfile.NamedTemporaryFile(
-                delete=False, suffix=".pcap"
+                delete=False, suffix=".pcapng"
             ) as temp_baseline:
                 temp_baseline.write(await baseline_file.read())
                 baseline_path = temp_baseline.name
@@ -933,14 +933,14 @@ async def save_analysis(
     """
     try:
         # Create temporary files to store the uploaded files
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".pcap") as temp_pcap:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pcapng") as temp_pcap:
             temp_pcap.write(await pcap_file.read())
             pcap_path = temp_pcap.name
 
         baseline_path = None
         if baseline_file:
             with tempfile.NamedTemporaryFile(
-                delete=False, suffix=".pcap"
+                delete=False, suffix=".pcapng"
             ) as temp_baseline:
                 temp_baseline.write(await baseline_file.read())
                 baseline_path = temp_baseline.name
