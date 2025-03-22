@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState, useEffect } from "react"
-import { Clock, Filter, LayoutDashboard, LineChart, Moon, Pizza, Search, Sun } from "lucide-react"
+import { Clock, Filter, LayoutDashboard, LineChart, Moon, Pizza, Plus, Search, Sun } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -78,6 +78,16 @@ export default function AnalysisLayout({ children }: { children: React.ReactNode
 						<Badge variant="outline">4 Protocols</Badge>
 						<Button variant="outline" size="sm" onClick={handleExportReport}>
 							Export Report
+						</Button>
+						<Button
+							variant="outline"
+							size="sm"
+							onClick={() => {
+								router.push("/")
+							}}
+						>
+							<Plus className="h-6 w-6" />
+							Upload New
 						</Button>
 						{mounted && (
 							<Button
