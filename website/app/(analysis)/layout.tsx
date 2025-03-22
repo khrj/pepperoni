@@ -122,15 +122,17 @@ export default function AnalysisLayout({ children }: { children: React.ReactNode
 						</Button>
 					</div>
 
-					<div className="flex items-center gap-2">
-						<div className="relative">
-							<Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-							<Input type="search" placeholder="Search packets..." className="pl-8 w-[250px]" />
+					{pathname === "/packets" ? (
+						<div className="flex items-center gap-2">
+							<div className="relative">
+								<Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+								<Input type="search" placeholder="Search packets..." className="pl-8 w-[250px]" />
+							</div>
+							<Button variant="outline" size="icon">
+								<Filter className="h-4 w-4" />
+							</Button>
 						</div>
-						<Button variant="outline" size="icon">
-							<Filter className="h-4 w-4" />
-						</Button>
-					</div>
+					) : null}
 				</div>
 
 				{children}
