@@ -2,8 +2,8 @@
 
 import type React from "react";
 
-import { useState } from "react";
-import { Clock, Pizza, Upload } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Clock, Moon, Pizza, Sun, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,12 +13,20 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
+import { useTheme } from "@/hooks/use-theme";
 
 export default function UploadPage() {
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const router = useRouter();
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  // Avoid hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -93,12 +101,26 @@ export default function UploadPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <header className="border-b bg-background">
-        <div className="container mx-auto px-4 h-14 flex items-center">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2">
             {/* <Clock className="h-6 w-6" /> */}
             <Pizza className="h-6 w-6" />
             <span className="text-lg font-bold">Pepperoni</span>
           </div>
+          {mounted && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            >
+              {theme === "dark" ? (
+                <Sun className="h-4 w-4" />
+              ) : (
+                <Moon className="h-4 w-4" />
+              )}
+              <span className="sr-only">Toggle theme</span>
+            </Button>
+          )}
         </div>
       </header>
 
@@ -106,10 +128,6 @@ export default function UploadPage() {
         <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle className="text-2xl">Upload Packet Capture</CardTitle>
-            <CardDescription>
-              Upload a .pcapng file to analyze network delays in your IoT/MQTT
-              workflow
-            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">

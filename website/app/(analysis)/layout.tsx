@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useTheme } from "next-themes";
 import { Badge } from "@/components/ui/badge";
+import { generatePDF } from "@/lib/pdf-export";
 
 export default function AnalysisLayout({
   children,
@@ -37,6 +38,36 @@ export default function AnalysisLayout({
   const handleExportReport = () => {
     // Implementation for exporting report
     console.log("Exporting report...");
+
+    // try {
+    //   generatePDF(data, "dashboard").then((pdfBlob) => {
+    //     const url = URL.createObjectURL(pdfBlob);
+    //     const a = document.createElement("a");
+    //     a.href
+    //       = url;
+    //     a.download = "mqtt-analysis-report.pdf";
+    //     document.body.appendChild(a);
+    //     a.click();
+    //     URL.revokeObjectURL(url);
+    //   }
+    // }
+    //   catch (error) {
+    //     console.error("Error generating PDF:", error);
+    //   }
+
+    // try {
+
+    //   const pdfBlob = await generatePDF(data, "dashboard");
+    //   const url = URL.createObjectURL(pdfBlob);
+    //   const a = document.createElement("a");
+    //   a.href = url;
+    //   a.download = "mqtt-analysis-report.pdf";
+    //   document.body.appendChild(a);
+    //   a.click();
+    //   URL.revokeObjectURL(url);
+    // } catch (error) {
+    //   console.error("Error generating PDF:", error);
+    // }
   };
 
   return (
