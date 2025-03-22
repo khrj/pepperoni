@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import {
+	DynamicPaginationItems,
 	Pagination,
 	PaginationContent,
 	PaginationEllipsis,
@@ -144,49 +145,28 @@ export default function PacketsPage() {
 
 					<div className="p-4 flex justify-end">
 						<Pagination>
-							<PaginationContent>
-								<PaginationItem>
-									<PaginationPrevious
-										onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-										disabled={currentPage === 1}
-									/>
-								</PaginationItem>
-								{Array.from({ length: Math.min(5, totalPages) }).map((_, i) => {
-									const pageNumber = i + 1
-									return (
-										<PaginationItem key={pageNumber}>
-											<PaginationLink
-												isActive={currentPage === pageNumber}
-												onClick={() => setCurrentPage(pageNumber)}
-											>
-												{pageNumber}
-											</PaginationLink>
-										</PaginationItem>
-									)
-								})}
-								{totalPages > 5 && (
-									<>
-										<PaginationItem>
-											<PaginationEllipsis />
-										</PaginationItem>
-										<PaginationItem>
-											<PaginationLink
-												isActive={currentPage === totalPages}
-												onClick={() => setCurrentPage(totalPages)}
-											>
-												{totalPages}
-											</PaginationLink>
-										</PaginationItem>
-									</>
-								)}
-								<PaginationItem>
-									<PaginationNext
-										onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-										disabled={currentPage === totalPages}
-									/>
-								</PaginationItem>
-							</PaginationContent>
-						</Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            />
+          </PaginationItem>
+          
+          <DynamicPaginationItems 
+            currentPage={currentPage} 
+            totalPages={totalPages} 
+            setCurrentPage={setCurrentPage} 
+          />
+          
+          <PaginationItem>
+            <PaginationNext
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
 					</div>
 				</CardContent>
 			</Card>
@@ -243,8 +223,8 @@ export default function PacketsPage() {
 											{selectedPacket.delay > 300
 												? "High"
 												: selectedPacket.delay > 200
-													? "Medium"
-													: "Low"}
+												? "Medium"
+												: "Low"}
 										</span>
 									</div>
 								</div>
