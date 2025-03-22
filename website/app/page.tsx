@@ -61,35 +61,30 @@ export default function UploadPage() {
 
 		setIsUploading(true)
 
-		// Simulate file upload and processing
-		setTimeout(() => {
-			setIsUploading(false)
-			router.push("/dashboard")
-		}, 2000)
-
 		// Actual implementation would look like:
-		/*
-    try {
-      const formData = new FormData()
-      formData.append('file', file)
-      
-      const response = await fetch('MOCK_URL/upload', {
-        method: 'POST',
-        body: formData
-      })
-      
-      if (response.ok) {
-        router.push('/dashboard')
-      } else {
-        alert('Error uploading file')
-      }
-    } catch (error) {
-      console.error('Error:', error)
-      alert('Error uploading file')
-    } finally {
-      setIsUploading(false)
-    }
-    */
+
+		try {
+			const formData = new FormData()
+			formData.append("pcap_file", file)
+
+			const response = await fetch("http://localhost:8000/analyze", {
+				method: "POST",
+				body: formData,
+			})
+
+			console.log(await response.json())
+
+			if (response.ok) {
+				router.push("/dashboard")
+			} else {
+				alert("Error uploading file")
+			}
+		} catch (error) {
+			console.error("Error:", error)
+			alert("Error uploading file")
+		} finally {
+			setIsUploading(false)
+		}
 	}
 
 	return (
