@@ -2,14 +2,14 @@
 // In a real application, you would use a library like jsPDF or react-pdf
 
 export async function generatePDF(data: any, type: "dashboard" | "packets" | "insights") {
-  // In a real implementation, this would generate a PDF based on the data
-  console.log(`Generating ${type} PDF with data:`, data)
+	// In a real implementation, this would generate a PDF based on the data
+	console.log(`Generating ${type} PDF with data:`, data)
 
-  // Simulate PDF generation delay
-  await new Promise((resolve) => setTimeout(resolve, 2000))
+	// Simulate PDF generation delay
+	await new Promise(resolve => setTimeout(resolve, 2000))
 
-  // Return a mock PDF blob
-  return new Blob(["PDF content"], { type: "application/pdf" })
+	// Return a mock PDF blob
+	return new Blob(["PDF content"], { type: "application/pdf" })
 }
 
 // Example usage:
@@ -31,4 +31,3 @@ const handleExportPDF = async () => {
   }
 }
 */
-

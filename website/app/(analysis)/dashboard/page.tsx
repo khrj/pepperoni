@@ -1,12 +1,6 @@
 "use client"
 
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import {
 	Bar,
 	BarChart,
@@ -94,28 +88,17 @@ export default function DashboardPage() {
 				<Card>
 					<CardContent className="p-6">
 						<div className="space-y-2">
-							<h3 className="text-sm font-medium">
-								Average Latency
-							</h3>
-							<p className="text-3xl font-bold">
-								{summaryData.avgLatency} ms
-							</p>
+							<h3 className="text-sm font-medium">Average Latency</h3>
+							<p className="text-3xl font-bold">{summaryData.avgLatency} ms</p>
 							<p className="text-xs text-muted-foreground">
-								{(
-									(summaryData.avgLatency /
-										summaryData.baseline.avgLatency -
-										1) *
-									100
-								).toFixed(1)}
-								% from baseline
+								{((summaryData.avgLatency / summaryData.baseline.avgLatency - 1) * 100).toFixed(1)}%
+								from baseline
 							</p>
 							<div className="h-2 bg-muted rounded-full overflow-hidden">
 								<div
 									className="h-full bg-primary"
 									style={{
-										width: `${
-											(summaryData.avgLatency / 500) * 100
-										}%`,
+										width: `${(summaryData.avgLatency / 500) * 100}%`,
 									}}
 								/>
 							</div>
@@ -127,25 +110,16 @@ export default function DashboardPage() {
 					<CardContent className="p-6">
 						<div className="space-y-2">
 							<h3 className="text-sm font-medium">Packet Loss</h3>
-							<p className="text-3xl font-bold">
-								{summaryData.packetLoss}%
-							</p>
+							<p className="text-3xl font-bold">{summaryData.packetLoss}%</p>
 							<p className="text-xs text-muted-foreground">
-								{(
-									(summaryData.packetLoss /
-										summaryData.baseline.packetLoss -
-										1) *
-									100
-								).toFixed(1)}
-								% from baseline
+								{((summaryData.packetLoss / summaryData.baseline.packetLoss - 1) * 100).toFixed(1)}%
+								from baseline
 							</p>
 							<div className="h-2 bg-muted rounded-full overflow-hidden">
 								<div
 									className="h-full bg-primary"
 									style={{
-										width: `${
-											(summaryData.packetLoss / 5) * 100
-										}%`,
+										width: `${(summaryData.packetLoss / 5) * 100}%`,
 									}}
 								/>
 							</div>
@@ -157,25 +131,16 @@ export default function DashboardPage() {
 					<CardContent className="p-6">
 						<div className="space-y-2">
 							<h3 className="text-sm font-medium">Jitter</h3>
-							<p className="text-3xl font-bold">
-								{summaryData.jitter} ms
-							</p>
+							<p className="text-3xl font-bold">{summaryData.jitter} ms</p>
 							<p className="text-xs text-muted-foreground">
-								{(
-									(summaryData.jitter /
-										summaryData.baseline.jitter -
-										1) *
-									100
-								).toFixed(1)}
-								% from baseline
+								{((summaryData.jitter / summaryData.baseline.jitter - 1) * 100).toFixed(1)}% from
+								baseline
 							</p>
 							<div className="h-2 bg-muted rounded-full overflow-hidden">
 								<div
 									className="h-full bg-primary"
 									style={{
-										width: `${
-											(summaryData.jitter / 50) * 100
-										}%`,
+										width: `${(summaryData.jitter / 50) * 100}%`,
 									}}
 								/>
 							</div>
@@ -187,12 +152,8 @@ export default function DashboardPage() {
 			<div className="grid gap-4 grid-cols-1 md:grid-cols-2">
 				<Card>
 					<CardHeader className="pb-2">
-						<CardTitle className="text-base">
-							Protocol Distribution
-						</CardTitle>
-						<CardDescription>
-							Breakdown of protocols in the capture
-						</CardDescription>
+						<CardTitle className="text-base">Protocol Distribution</CardTitle>
+						<CardDescription>Breakdown of protocols in the capture</CardDescription>
 					</CardHeader>
 					<CardContent className="h-[300px] justify-center align-middle">
 						<ResponsiveContainer width="100%" height={300}>
@@ -207,27 +168,23 @@ export default function DashboardPage() {
 									fill="#8884d8"
 									paddingAngle={0}
 									dataKey="value"
-									label={({ name, percent }) =>
-										`${name} ${(percent * 100).toFixed(0)}%`
-									}
+									label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
 								>
-									{protocolDistribution.map(
-										(entry, index) => (
-											<Cell
-												className="outline-none"
-												key={`cell-${index}`}
-												fill={
-													entry.name === "MQTT"
-														? COLORS.mqtt
-														: entry.name === "TCP"
+									{protocolDistribution.map((entry, index) => (
+										<Cell
+											className="outline-none"
+											key={`cell-${index}`}
+											fill={
+												entry.name === "MQTT"
+													? COLORS.mqtt
+													: entry.name === "TCP"
 														? COLORS.tcp
 														: entry.name === "UDP"
-														? COLORS.udp
-														: COLORS.dns
-												}
-											/>
-										)
-									)}
+															? COLORS.udp
+															: COLORS.dns
+											}
+										/>
+									))}
 								</Pie>
 								<Tooltip formatter={value => `${value}%`} />
 							</PieChart>
@@ -237,12 +194,8 @@ export default function DashboardPage() {
 
 				<Card>
 					<CardHeader className="pb-2">
-						<CardTitle className="text-base">
-							Delay Categories
-						</CardTitle>
-						<CardDescription>
-							Classification of delay types
-						</CardDescription>
+						<CardTitle className="text-base">Delay Categories</CardTitle>
+						<CardDescription>Classification of delay types</CardDescription>
 					</CardHeader>
 					<CardContent className="h-[300px]">
 						<ResponsiveContainer height={300} width="100%">
@@ -257,24 +210,20 @@ export default function DashboardPage() {
 									fill="#8884d8"
 									paddingAngle={0}
 									dataKey="value"
-									label={({ name, percent }) =>
-										`${name} ${(percent * 100).toFixed(0)}%`
-									}
+									label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
 								>
 									{delayCategories.map((entry, index) => (
 										<Cell
 											className="outline-none"
 											key={`cell-${index}`}
 											fill={
-												entry.name ===
-												"Broker Processing"
+												entry.name === "Broker Processing"
 													? COLORS.brokerProcessing
 													: entry.name === "Network"
-													? COLORS.network
-													: entry.name ===
-													  "Bundling Delay"
-													? COLORS.bundlingDelay
-													: COLORS.retransmission
+														? COLORS.network
+														: entry.name === "Bundling Delay"
+															? COLORS.bundlingDelay
+															: COLORS.retransmission
 											}
 										/>
 									))}
@@ -293,46 +242,15 @@ export default function DashboardPage() {
 				</CardHeader>
 				<CardContent className="h-[300px]">
 					<ResponsiveContainer width="100%" height={300}>
-						<AreaChart
-							data={latencyTrends}
-							margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-						>
+						<AreaChart data={latencyTrends} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
 							<defs>
-								<linearGradient
-									id="colorMqtt"
-									x1="0"
-									y1="0"
-									x2="0"
-									y2="1"
-								>
-									<stop
-										offset="5%"
-										stopColor={COLORS.mqtt}
-										stopOpacity={0.8}
-									/>
-									<stop
-										offset="95%"
-										stopColor={COLORS.mqtt}
-										stopOpacity={0.1}
-									/>
+								<linearGradient id="colorMqtt" x1="0" y1="0" x2="0" y2="1">
+									<stop offset="5%" stopColor={COLORS.mqtt} stopOpacity={0.8} />
+									<stop offset="95%" stopColor={COLORS.mqtt} stopOpacity={0.1} />
 								</linearGradient>
-								<linearGradient
-									id="colorTcp"
-									x1="0"
-									y1="0"
-									x2="0"
-									y2="1"
-								>
-									<stop
-										offset="5%"
-										stopColor={COLORS.tcp}
-										stopOpacity={0.8}
-									/>
-									<stop
-										offset="95%"
-										stopColor={COLORS.tcp}
-										stopOpacity={0.1}
-									/>
+								<linearGradient id="colorTcp" x1="0" y1="0" x2="0" y2="1">
+									<stop offset="5%" stopColor={COLORS.tcp} stopOpacity={0.8} />
+									<stop offset="95%" stopColor={COLORS.tcp} stopOpacity={0.1} />
 								</linearGradient>
 							</defs>
 							<XAxis dataKey="time" />
@@ -361,26 +279,17 @@ export default function DashboardPage() {
 			<Card>
 				<CardHeader className="pb-2">
 					<CardTitle className="text-base">Delay Timeline</CardTitle>
-					<CardDescription>
-						Visualization of packet delays across the capture period
-					</CardDescription>
+					<CardDescription>Visualization of packet delays across the capture period</CardDescription>
 				</CardHeader>
 				<CardContent className="h-[300px]">
 					<ResponsiveContainer width="100%" height={300}>
-						<BarChart
-							data={delayTimeline}
-							margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-						>
+						<BarChart data={delayTimeline} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
 							<CartesianGrid strokeDasharray="3 3" />
 							<XAxis dataKey="time" />
 							<YAxis />
 							<Tooltip />
 							<Legend />
-							<Bar
-								dataKey="mqtt"
-								name="MQTT"
-								fill={COLORS.mqtt}
-							/>
+							<Bar dataKey="mqtt" name="MQTT" fill={COLORS.mqtt} />
 							<Bar dataKey="tcp" name="TCP" fill={COLORS.tcp} />
 							<Bar dataKey="udp" name="UDP" fill={COLORS.udp} />
 						</BarChart>
