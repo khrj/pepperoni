@@ -1,46 +1,59 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useEffect } from "react"
-import { Clock, Filter, LayoutDashboard, LineChart, Moon, Search, Sun } from "lucide-react"
-import { usePathname, useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { useTheme } from "next-themes"
-import { Badge } from "@/components/ui/badge"
+import { useState, useEffect } from "react";
+import {
+  Clock,
+  Filter,
+  LayoutDashboard,
+  LineChart,
+  Moon,
+  Pizza,
+  Search,
+  Sun,
+} from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useTheme } from "next-themes";
+import { Badge } from "@/components/ui/badge";
 
 export default function AnalysisLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const pathname = usePathname()
-  const router = useRouter()
-  const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
+  const pathname = usePathname();
+  const router = useRouter();
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
   // Avoid hydration mismatch
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
 
   const handleExportReport = () => {
     // Implementation for exporting report
-    console.log("Exporting report...")
-  }
+    console.log("Exporting report...");
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
       <header className="border-b bg-background">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Clock className="h-6 w-6" />
-            <span className="text-lg font-bold">MQTT Delay Analyzer</span>
+            {/* <Clock className="h-6 w-6" /> */}
+            <Pizza className="h-6 w-6" />
+            <span className="text-lg font-bold">Pepperoni</span>
           </div>
 
           <div className="flex items-center gap-4">
-            <Badge variant="outline" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
+            <Badge
+              variant="outline"
+              className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
+            >
               Analysis Complete
             </Badge>
             <Badge variant="outline">1,245 Packets</Badge>
@@ -49,8 +62,16 @@ export default function AnalysisLayout({
               Export Report
             </Button>
             {mounted && (
-              <Button variant="ghost" size="icon" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
-                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              >
+                {theme === "dark" ? (
+                  <Sun className="h-4 w-4" />
+                ) : (
+                  <Moon className="h-4 w-4" />
+                )}
                 <span className="sr-only">Toggle theme</span>
               </Button>
             )}
@@ -90,7 +111,11 @@ export default function AnalysisLayout({
           <div className="flex items-center gap-2">
             <div className="relative">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input type="search" placeholder="Search packets..." className="pl-8 w-[250px]" />
+              <Input
+                type="search"
+                placeholder="Search packets..."
+                className="pl-8 w-[250px]"
+              />
             </div>
             <Button variant="outline" size="icon">
               <Filter className="h-4 w-4" />
@@ -101,6 +126,5 @@ export default function AnalysisLayout({
         {children}
       </div>
     </div>
-  )
+  );
 }
-
