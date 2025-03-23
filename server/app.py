@@ -4,6 +4,7 @@ from fastapi import FastAPI, File, UploadFile, Form, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import uuid
+from pydantic import BaseModel, Field
 import uvicorn
 from typing import Optional
 
@@ -193,7 +194,12 @@ def get_summary_data(packets, baseline_packets=None):
     delay_diffs = [abs(delays[i] - delays[i - 1]) for i in range(1, len(delays))]
     jitter = round(mean(delay_diffs)) if delay_diffs else 0
 
-    result = {"avgLatency": avg_latency, "packetLoss": packet_loss, "jitter": jitter}
+    result = {
+        "avgLatency": avg_latency,
+        "packetLoss": packet_loss,
+        "jitter": jitter,
+        "num_packets": len(packets),
+    }
 
     # Process baseline data if provided
     if baseline_packets:
@@ -807,9 +813,10 @@ def get_packet_data(packets, limit=100):
                 "destination": packet["destination"],
                 "protocol": packet["protocol"],
                 "size": size,
-                "delay": delay,
+                "delay": round(delay),
+                "delayCategory": delay_category,
                 "hexPayload": raw_payload,  # Include the raw hex payload
-                "formattedPayload": formatted_payload,  # Include formatted payload for display   "delayCategory": delay_category,
+                "formattedPayload": formatted_payload,  # Include formatted payload for display
             }
         )
 
@@ -938,6 +945,7 @@ async def analyze_pcap_file(
 
         # Store the analysis results in cache
         file_id = str(uuid.uuid4())
+        analysis_results["file_id"] = file_id
         print("Saving analysis to cache...")
         redis_cache.store_analysis(file_checksum, file_id, analysis_results)
 
@@ -999,6 +1007,28 @@ async def save_analysis(
         raise HTTPException(
             status_code=500, detail=f"Error analyzing PCAP file: {str(e)}"
         )
+
+
+class PacketItem(BaseModel):
+    file_id: str
+    num_packets: int
+    start_index: int
+
+
+@app.post("/get_packets")
+async def get_packets(
+    file_id: Optional[str] = None, num_packets: int = 100, start_index: int = 0
+):
+    # Check if analysis already exists in cache
+    print("File id", file_id)
+    if file_id is None:
+        return {"message": "file_id required"}
+    cached_analysis = redis_cache.get_analysis_file_id(file_id)
+    if cached_analysis:
+        packets = cached_analysis["analysis_results"]["packetData"]
+        return packets[start_index : start_index + num_packets]
+    else:
+        return {"message": "Analysis not found in cache"}
 
 
 if __name__ == "__main__":

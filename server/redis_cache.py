@@ -22,6 +22,7 @@ class RedisCache:
         password=None,
         expiration_time=86400,
         prefix="pcap_analysis:",
+        file_prefix="file_id:",
     ):
         """
         Initialize Redis connection.
@@ -43,10 +44,14 @@ class RedisCache:
         )
         self.expiration_time = expiration_time
         self.prefix = prefix
+        self.file_prefix = file_prefix
 
     def _generate_key(self, checksum: str) -> str:
         """Generate a Redis key based on file checksum."""
         return f"{self.prefix}{checksum}"
+
+    def _generate_file_key(self, file_id: str) -> str:
+        return f"{self.file_prefix}{file_id}"
 
     def store_analysis(
         self, checksum: str, file_id: str, analysis_data: Dict[str, Any]
@@ -64,13 +69,17 @@ class RedisCache:
         """
         try:
             # Create a dictionary with file_id and analysis results
-            cache_data = {"file_id": file_id, "analysis_results": analysis_data}
+            cache_data = {"analysis_results": analysis_data}
 
             # Convert to JSON string and store in Redis
             cache_data_json = json.dumps(cache_data)
             key = self._generate_key(checksum)
             print("storing in redis")
             self.redis_client.set(key, cache_data_json, ex=self.expiration_time)
+
+            file_key = self._generate_file_key(file_id)
+            print("storing uiud in redis")
+            self.redis_client.set(file_key, key, ex=self.expiration_time)
             return True
         except Exception as e:
             print(f"Redis storage error: {str(e)}")
@@ -94,6 +103,25 @@ class RedisCache:
                 return None
 
             # Convert from JSON string to dictionary
+            return json.loads(cached_data)
+        except Exception as e:
+            print(f"Redis retrieval error: {str(e)}")
+            return None
+
+    def get_analysis_file_id(self, file_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Retrieve cached analysis results for a file id.
+        """
+        try:
+            key = self._generate_file_key(file_id)
+            checksum_key = self.redis_client.get(key)
+            if not checksum_key:
+                print("Checksum not found", key)
+                return None
+            cached_data = self.redis_client.get(checksum_key)
+            if not cached_data:
+                print("cache not found", checksum_key)
+                return None
             return json.loads(cached_data)
         except Exception as e:
             print(f"Redis retrieval error: {str(e)}")
