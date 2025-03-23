@@ -18,21 +18,7 @@ import {
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 
-// Dummy packet data
-const packetData = Array.from({ length: 100 }).map((_, i) => ({
-	id: i + 1,
-	timestamp: `14:32:${(15 + i * 2).toString().padStart(2, "0")}.${Math.floor(Math.random() * 1000)
-		.toString()
-		.padStart(3, "0")}`,
-	source: `192.168.1.${Math.floor(Math.random() * 20) + 1}:${Math.floor(Math.random() * 1000) + 1000}`,
-	destination: `192.168.1.${Math.floor(Math.random() * 20) + 100}:${Math.floor(Math.random() * 1000) + 8000}`,
-	protocol: ["MQTT", "TCP", "UDP", "DNS"][Math.floor(Math.random() * 4)],
-	size: [64, 96, 128, 256, 384, 512, 768, 1024][Math.floor(Math.random() * 8)],
-	delay: Math.floor(Math.random() * 400) + 50,
-	delayCategory: ["Broker Processing", "Network Transmission", "Bundling Delay", "Retransmissions"][
-		Math.floor(Math.random() * 4)
-	],
-}))
+const packetData = JSON.parse(localStorage.getItem("analysisResults") || "{}").packetData
 
 export default function PacketsPage() {
 	const [selectedProtocol, setSelectedProtocol] = useState("all")
@@ -145,28 +131,28 @@ export default function PacketsPage() {
 
 					<div className="p-4 flex justify-end">
 						<Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-            />
-          </PaginationItem>
-          
-          <DynamicPaginationItems 
-            currentPage={currentPage} 
-            totalPages={totalPages} 
-            setCurrentPage={setCurrentPage} 
-          />
-          
-          <PaginationItem>
-            <PaginationNext
-              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-              disabled={currentPage === totalPages}
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+							<PaginationContent>
+								<PaginationItem>
+									<PaginationPrevious
+										onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+										disabled={currentPage === 1}
+									/>
+								</PaginationItem>
+
+								<DynamicPaginationItems
+									currentPage={currentPage}
+									totalPages={totalPages}
+									setCurrentPage={setCurrentPage}
+								/>
+
+								<PaginationItem>
+									<PaginationNext
+										onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+										disabled={currentPage === totalPages}
+									/>
+								</PaginationItem>
+							</PaginationContent>
+						</Pagination>
 					</div>
 				</CardContent>
 			</Card>
@@ -223,8 +209,8 @@ export default function PacketsPage() {
 											{selectedPacket.delay > 300
 												? "High"
 												: selectedPacket.delay > 200
-												? "Medium"
-												: "Low"}
+													? "Medium"
+													: "Low"}
 										</span>
 									</div>
 								</div>

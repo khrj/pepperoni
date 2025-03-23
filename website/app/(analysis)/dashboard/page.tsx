@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import {
 	Bar,
@@ -17,71 +18,38 @@ import {
 	ResponsiveContainer,
 } from "recharts"
 
-// Dummy data
-const summaryData = {
-	avgLatency: 245, // ms
-	packetLoss: 2.4, // %
-	jitter: 18, // ms
-	baseline: {
-		avgLatency: 210,
-		packetLoss: 1.8,
-		jitter: 15,
-	},
-}
-
-const protocolDistribution = [
-	{ name: "MQTT", value: 65 },
-	{ name: "TCP", value: 20 },
-	{ name: "UDP", value: 10 },
-	{ name: "DNS", value: 5 },
-]
-
-const delayCategories = [
-	{ name: "Broker Processing", value: 42 },
-	{ name: "Network", value: 28 },
-	{ name: "Bundling Delay", value: 18 },
-	{ name: "Retransmission", value: 12 },
-]
-
-const latencyTrends = [
-	{ time: "14:00", mqtt: 220, tcp: 180 },
-	{ time: "14:10", mqtt: 250, tcp: 190 },
-	{ time: "14:20", mqtt: 280, tcp: 200 },
-	{ time: "14:30", mqtt: 450, tcp: 220 },
-	{ time: "14:40", mqtt: 350, tcp: 210 },
-	{ time: "14:50", mqtt: 300, tcp: 200 },
-	{ time: "15:00", mqtt: 280, tcp: 190 },
-	{ time: "15:10", mqtt: 260, tcp: 185 },
-	{ time: "15:20", mqtt: 240, tcp: 180 },
-	{ time: "15:30", mqtt: 230, tcp: 175 },
-]
-
-const delayTimeline = [
-	{ time: "14:00", mqtt: 120, tcp: 80, udp: 45 },
-	{ time: "14:10", mqtt: 150, tcp: 90, udp: 50 },
-	{ time: "14:20", mqtt: 180, tcp: 100, udp: 55 },
-	{ time: "14:30", mqtt: 350, tcp: 120, udp: 60 },
-	{ time: "14:40", mqtt: 250, tcp: 110, udp: 55 },
-	{ time: "14:50", mqtt: 200, tcp: 100, udp: 50 },
-	{ time: "15:00", mqtt: 180, tcp: 90, udp: 45 },
-	{ time: "15:10", mqtt: 160, tcp: 85, udp: 40 },
-	{ time: "15:20", mqtt: 140, tcp: 80, udp: 35 },
-	{ time: "15:30", mqtt: 130, tcp: 75, udp: 30 },
-]
-
-// Colors for charts
-const COLORS = {
-	mqtt: "#f4735b",
-	tcp: "#45b7a9",
-	udp: "#fac858",
-	dns: "#5470c6",
-	brokerProcessing: "#f4735b",
-	network: "#45b7a9",
-	bundlingDelay: "#5470c6",
-	retransmission: "#fac858",
-}
-
 export default function DashboardPage() {
+	const [summaryData, setSummaryData] = useState(null)
+	const [protocolDistribution, setProtocolDistribution] = useState([])
+	const [delayCategories, setDelayCategories] = useState([])
+	const [latencyTrends, setLatencyTrends] = useState([])
+	const [delayTimeline, setDelayTimeline] = useState([])
+
+	useEffect(() => {
+		const analysisResults = JSON.parse(localStorage.getItem("analysisResults") || "{}")
+		setSummaryData(analysisResults.summaryData || {})
+		setProtocolDistribution(analysisResults.protocolDistribution || [])
+		setDelayCategories(analysisResults.delayCategories || [])
+		setLatencyTrends(analysisResults.latencyTrends || [])
+		setDelayTimeline(analysisResults.delayTimeline || [])
+	}, [])
+
+	// Colors for charts
+	const COLORS = {
+		mqtt: "#f4735b",
+		tcp: "#45b7a9",
+		udp: "#fac858",
+		dns: "#5470c6",
+		brokerProcessing: "#f4735b",
+		network: "#45b7a9",
+		bundlingDelay: "#5470c6",
+		retransmission: "#fac858",
+	}
+
+	if (!summaryData) {
+		return <div>Loading...</div>
+	}
+
 	return (
 		<div className="space-y-4">
 			<div className="grid gap-4 grid-cols-1 md:grid-cols-3">
@@ -91,7 +59,7 @@ export default function DashboardPage() {
 							<h3 className="text-sm font-medium">Average Latency</h3>
 							<p className="text-3xl font-bold">{summaryData.avgLatency} ms</p>
 							<p className="text-xs text-muted-foreground">
-								{((summaryData.avgLatency / summaryData.baseline.avgLatency - 1) * 100).toFixed(1)}%
+								{/* {((summaryData.avgLatency / summaryData.baseline.avgLatency - 1) * 100).toFixed(1)}% */}
 								from baseline
 							</p>
 							<div className="h-2 bg-muted rounded-full overflow-hidden">
@@ -112,7 +80,7 @@ export default function DashboardPage() {
 							<h3 className="text-sm font-medium">Packet Loss</h3>
 							<p className="text-3xl font-bold">{summaryData.packetLoss}%</p>
 							<p className="text-xs text-muted-foreground">
-								{((summaryData.packetLoss / summaryData.baseline.packetLoss - 1) * 100).toFixed(1)}%
+								{/* {((summaryData.packetLoss / summaryData.baseline.packetLoss - 1) * 100).toFixed(1)}% */}
 								from baseline
 							</p>
 							<div className="h-2 bg-muted rounded-full overflow-hidden">
@@ -133,7 +101,7 @@ export default function DashboardPage() {
 							<h3 className="text-sm font-medium">Jitter</h3>
 							<p className="text-3xl font-bold">{summaryData.jitter} ms</p>
 							<p className="text-xs text-muted-foreground">
-								{((summaryData.jitter / summaryData.baseline.jitter - 1) * 100).toFixed(1)}% from
+								{/* {((summaryData.jitter / summaryData.baseline.jitter - 1) * 100).toFixed(1)}% from */}
 								baseline
 							</p>
 							<div className="h-2 bg-muted rounded-full overflow-hidden">

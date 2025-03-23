@@ -5,64 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts"
 
-// Dummy insights data
-const insightsData = {
-	insights: [
-		{
-			id: 1,
-			title: "Broker Processing Bottleneck",
-			description:
-				"Detected significant delays (avg. 320ms) during broker processing. This appears to be caused by excessive packet aggregation before forwarding.",
-			severity: "high",
-			impact: "Affects 42% of packets",
-			type: "bottleneck",
-		},
-		{
-			id: 2,
-			title: "Retransmission Spikes",
-			description:
-				"Multiple retransmission events detected between 14:32-14:45, indicating network congestion or packet loss. This is causing delays of up to 1.2s for affected packets.",
-			severity: "critical",
-			impact: "Affects 8% of packets",
-			type: "error",
-		},
-		{
-			id: 3,
-			title: "Bundle Size Optimization",
-			description:
-				"Current bundle size (avg. 24 packets) is causing unnecessary delays. Analysis suggests optimal bundle size of 12-15 packets would reduce latency by approximately 40%.",
-			severity: "medium",
-			impact: "Recommendation",
-			type: "recommendation",
-		},
-	],
-	correlations: [
-		{
-			id: 1,
-			title: "Packet Size vs Delay",
-			description: "Strong positive correlation (r=0.78) between packet size and processing delay",
-			data: [
-				{ size: "64", delay: 75 },
-				{ size: "128", delay: 110 },
-				{ size: "256", delay: 180 },
-				{ size: "512", delay: 250 },
-				{ size: "1024", delay: 350 },
-			],
-		},
-		{
-			id: 2,
-			title: "Protocol vs Delay",
-			description: "MQTT QoS 2 packets show 3.2x higher delay than QoS 0 packets",
-			data: [
-				{ protocol: "MQTT QoS 0", delay: 85 },
-				{ protocol: "MQTT QoS 1", delay: 180 },
-				{ protocol: "MQTT QoS 2", delay: 270 },
-				{ protocol: "TCP", delay: 95 },
-				{ protocol: "UDP", delay: 45 },
-			],
-		},
-	],
-}
+const insightsData = JSON.parse(localStorage.getItem("analysisResults") || "{}").insightsData
 
 export default function InsightsPage() {
 	const getSeverityColor = (severity: string) => {

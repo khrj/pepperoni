@@ -44,7 +44,7 @@ const DynamicPaginationItems: React.FC<DynamicPaginationItemsProps> = ({ current
 				<PaginationLink isActive={currentPage === pageNum} onClick={() => setCurrentPage(pageNum)}>
 					{pageNum}
 				</PaginationLink>
-			</PaginationItem>
+			</PaginationItem>,
 		)
 	}
 
@@ -53,7 +53,7 @@ const DynamicPaginationItems: React.FC<DynamicPaginationItemsProps> = ({ current
 		showPages.push(
 			<PaginationItem key={`ellipsis-${key}`}>
 				<PaginationEllipsis />
-			</PaginationItem>
+			</PaginationItem>,
 		)
 	}
 
@@ -129,7 +129,7 @@ const PaginationLink: React.FC<PaginationLinkProps> = ({ className, isActive, si
 				variant: isActive ? "outline" : "ghost",
 				size,
 			}),
-			className
+			className,
 		)}
 		{...props}
 	/>

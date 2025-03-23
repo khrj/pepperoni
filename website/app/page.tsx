@@ -61,8 +61,6 @@ export default function UploadPage() {
 
 		setIsUploading(true)
 
-		// Actual implementation would look like:
-
 		try {
 			const formData = new FormData()
 			formData.append("pcap_file", file)
@@ -72,9 +70,11 @@ export default function UploadPage() {
 				body: formData,
 			})
 
-			console.log(await response.json())
+			const responseData = await response.json()
 
 			if (response.ok) {
+				// Save the response to localStorage
+				localStorage.setItem("analysisResults", JSON.stringify(responseData))
 				router.push("/dashboard")
 			} else {
 				alert("Error uploading file")
