@@ -444,7 +444,7 @@ def get_insights_data(packets):
     """
     if not packets:
         return {"insights": [], "correlations": []}
-        
+
     from datetime import datetime
     import dpkt
     
@@ -460,7 +460,7 @@ def get_insights_data(packets):
             List of simplified packet dictionaries
         """
         simplified = []
-        
+
         for pkt in packets[:max_packets]:
             # Base information
             simplified_pkt = {
@@ -470,7 +470,7 @@ def get_insights_data(packets):
                 "source": f"{pkt['src_ip']}:{pkt.get('src_port', 0)}",
                 "destination": f"{pkt['dst_ip']}:{pkt.get('dst_port', 0)}"
             }
-            
+
             # Protocol-specific additions
             if pkt["protocol"] == "TCP":
                 simplified_pkt.update({
@@ -478,7 +478,7 @@ def get_insights_data(packets):
                         "retransmission": pkt.get("is_retransmission", False),
                     }
                 })
-                
+
             if pkt["protocol"] == "MQTT":
                 simplified_pkt.update({
                     "mqtt": {
@@ -486,12 +486,12 @@ def get_insights_data(packets):
                         "qos": pkt.get("mqtt_qos", 0)
                     }
                 })
-                
+
             # Remove unnecessary fields
             simplified_pkt.pop("raw_payload", None)
-            
+
             simplified.append(simplified_pkt)
-        
+
         return simplified
         
     packets = simplify_packets_for_llm(packets)
@@ -526,7 +526,7 @@ def get_insights_data(packets):
 											}}
 										/>
 										<Tooltip />
-										<Bar dataKey="delay" fill="#f4735b" />
+										<Bar dataKey="count" fill="#f4735b" />
 									</BarChart>
 								</ResponsiveContainer>
 							</CardContent>
@@ -575,14 +575,23 @@ Example insight: {{
 }}
 
 Example correlation: {{
-  "id": 1,
-  "title": "Packet Size vs Delay",
-  "description": "Strong positive correlation (r=0.82) between packet size and processing delay",
-  "data": {{
-    "64B": 120ms,
-    "128B": 150ms, 
-    "256B": 210ms
-  }}
+    "id": 1,
+    "title": "Packet Size and Retransmission",
+    "description": "The retransmission primarily affects packets with size 74, highlighting an issue with smaller packets being dropped.",
+    "data": [
+        {{
+            "size": "74",
+            "count": 104
+        }},
+        {{
+            "size": "96",
+            "count": 6
+        }},
+        {{
+            "size": "102",
+            "count": 8
+        }}
+    ]
 }}
 
 Return ONLY valid JSON with double quotes. No markdown formatting:"""
@@ -600,25 +609,25 @@ Return ONLY valid JSON with double quotes. No markdown formatting:"""
                 }
             ]
         )
-        
+
         response = response.choices[0].message.content
         cleaned = response.strip().replace('```json', '').replace('```', '')
-        
+
         # Parse and validate
         result = json.loads(cleaned)
-        
+
         # Convert data values to numeric if needed
         for corr in result.get('correlations', []):
             if isinstance(corr['data'], dict):
                 for k, v in corr['data'].items():
                     if isinstance(v, str) and 'ms' in v:
                         corr['data'][k] = float(v.replace('ms', '').strip())
-        
+
         return {
             "insights": result.get("insights", [])[:3],
             "correlations": result.get("correlations", [])[:2]
         }
-        
+
     except Exception as e:
         print(f"LLM analysis failed: {str(e)}")
         return {"insights": [], "correlations": []}

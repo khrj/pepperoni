@@ -110,20 +110,26 @@ export default function InsightsPage() {
 											top: 5,
 											right: 30,
 											left: 20,
-											bottom: 5,
+											bottom: 20,
 										}}
 									>
 										<CartesianGrid strokeDasharray="3 3" />
-										<XAxis dataKey={correlation.id === 1 ? "size" : "protocol"} />
+										<XAxis
+											dataKey={"size" in correlation.data[0] ? "size" : "protocol"}
+											label={{
+												value: "size" in correlation.data[0] ? "Size" : "Protocol",
+												position: "bottom",
+											}}
+										/>
 										<YAxis
 											label={{
-												value: "Delay (ms)",
+												value: "Count",
 												angle: -90,
 												position: "insideLeft",
 											}}
 										/>
 										<Tooltip />
-										<Bar dataKey="delay" fill="#f4735b" />
+										<Bar dataKey="count" fill="#f4735b" />
 									</BarChart>
 								</ResponsiveContainer>
 							</CardContent>
