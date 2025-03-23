@@ -1219,10 +1219,10 @@ async def get_packets(
 
 
 if __name__ == "__main__":
-    # uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
     
     # Testing LLM
-    packets = process_pcap("sample2.pcapng")
-    insights_data = get_insights_data(packets)
+    # packets = process_pcap("sample2.pcapng")
+    # insights_data = get_insights_data(packets)
     
-    print(insights_data)
+    # print(insights_data)
