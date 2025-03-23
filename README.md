@@ -1,10 +1,6 @@
 # Pepperoni - PCAPNG Analysis Framework
 
-<div style="display: flex; justify-content: space-around;">
-  <img src="./assets/homepage.png" alt="Image 1" style="width: 30%;">
-  <img src="./assets/analysis.png" alt="Image 2" style="width: 30%;">
-  <img src="./assets/packet_analysis.png" alt="Image 3" style="width: 30%;">
-</div>
+![Image](./assets/carbon.png)
 
 Pepperoni is a web-based framework designed to analyze PCAPNG files for network traffic insights. It extracts key network features such as packet delays, packet distributions, and other metrics to help with network performance analysis and anomaly detection.
 
@@ -92,6 +88,12 @@ pepperoni/
 │   ├── tsconfig.json     # TypeScript configuration
 │   ├── bun.lock          # Bun lock file
 ```
+
+<div style="display: flex; justify-content: space-around;">
+  <img src="./assets/homepage.png" alt="Image 1" style="width: 30%;">
+  <img src="./assets/analysis.png" alt="Image 2" style="width: 30%;">
+  <img src="./assets/packet_analysis.png" alt="Image 3" style="width: 30%;">
+</div>
 
 ## Running unit tests
 
