@@ -20,6 +20,13 @@ import time
 
 from redis_cache import RedisCache, calculate_file_checksum
 
+import google.generativeai as genai
+from datetime import datetime
+
+# Configure Gemini
+genai.configure(api_key="AIzaSyBH1e_YkXGL-sngYqpHSpvV1PQw-YJltOk")
+model = genai.GenerativeModel('gemini-2.0-flash')
+
 # Create Redis cache instance
 # These settings can be moved to environment variables or config file
 redis_cache = RedisCache(
@@ -425,217 +432,396 @@ def get_delay_timeline(packets, interval_secs=10):
 
 
 # Fix for the ZeroDivisionError in get_insights_data function
+# def get_insights_data(packets):
+#     """
+#     Generate insights from the packet data
+
+#     Args:
+#         packets: List of packet dictionaries
+
+#     Returns:
+#         Dictionary containing insights and correlations
+#     """
+#     if not packets:
+#         return {"insights": [], "correlations": []}
+
+#     # Track conversations
+#     packet_pairs = track_tcp_conversations(packets)
+
+#     # Calculate delays and gather data for insights
+#     sorted_packets = sorted(packets, key=lambda x: x["timestamp"])
+
+#     broker_delays = []
+#     retransmissions = []
+#     packet_sizes = defaultdict(list)
+#     protocol_delays = defaultdict(list)
+
+#     # Process packets
+#     for i, packet in enumerate(sorted_packets):
+#         if i == 0:
+#             continue
+
+#         delay = estimate_packet_delay(packet, sorted_packets[i - 1], packet_pairs)
+#         protocol = packet["protocol"]
+#         size = packet.get("size", 0)
+
+#         # Categorize
+#         if delay > 0:
+#             # Gather data for broker processing delays
+#             if protocol == "MQTT" and packet.get("mqtt_type") in [
+#                 3,
+#                 4,
+#             ]:  # PUBLISH and PUBACK
+#                 broker_delays.append({"timestamp": packet["timestamp"], "delay": delay})
+
+#             # Track retransmissions
+#             if protocol == "TCP" and packet.get("is_retransmission", False):
+#                 retransmissions.append(
+#                     {"timestamp": packet["timestamp"], "delay": delay}
+#                 )
+
+#             # Group by size ranges
+#             if size <= 64:
+#                 packet_sizes["64"].append(delay)
+#             elif size <= 128:
+#                 packet_sizes["128"].append(delay)
+#             elif size <= 256:
+#                 packet_sizes["256"].append(delay)
+#             elif size <= 512:
+#                 packet_sizes["512"].append(delay)
+#             else:
+#                 packet_sizes["1024"].append(delay)
+
+#             # Track delays by protocol and QoS for MQTT
+#             if protocol == "MQTT":
+#                 qos = packet.get("mqtt_qos", 0)
+#                 protocol_delays[f"MQTT QoS {qos}"].append(delay)
+#             else:
+#                 protocol_delays[protocol].append(delay)
+
+#     # Create insights list
+#     insights = []
+
+#     # Insight 1: Check for broker processing bottlenecks
+#     if broker_delays:
+#         avg_broker_delay = mean([bd["delay"] for bd in broker_delays])
+#         broker_percentage = (len(broker_delays) / len(packets)) * 100
+
+#         if avg_broker_delay > 250:
+#             insights.append(
+#                 {
+#                     "id": 1,
+#                     "title": "Broker Processing Bottleneck",
+#                     "description": f"Detected significant delays (avg. {round(avg_broker_delay)}ms) during broker processing. This appears to be caused by excessive packet aggregation before forwarding.",
+#                     "severity": "high",
+#                     "impact": f"Affects {round(broker_percentage)}% of packets",
+#                     "type": "bottleneck",
+#                 }
+#             )
+
+#     # Insight 2: Check for retransmission spikes
+#     if retransmissions:
+#         # Group by time to find spikes
+#         retrans_by_time = defaultdict(list)
+#         for r in retransmissions:
+#             time_key = datetime.datetime.fromtimestamp(r["timestamp"]).strftime("%H:%M")
+#             retrans_by_time[time_key].append(r)
+
+#         # Find periods with high retransmissions
+#         spike_periods = [
+#             time for time, pkts in retrans_by_time.items() if len(pkts) > 5
+#         ]
+
+#         if spike_periods:
+#             retrans_percentage = (len(retransmissions) / len(packets)) * 100
+#             max_delay = max([r["delay"] for r in retransmissions])
+
+#             insights.append(
+#                 {
+#                     "id": 2,
+#                     "title": "Retransmission Spikes",
+#                     "description": f"Multiple retransmission events detected between {spike_periods[0] if spike_periods else '00:00'}-{spike_periods[-1] if spike_periods else '00:00'}, indicating network congestion or packet loss. This is causing delays of up to {max_delay/1000:.1f}s for affected packets.",
+#                     "severity": "critical",
+#                     "impact": f"Affects {round(retrans_percentage)}% of packets",
+#                     "type": "error",
+#                 }
+#             )
+
+#     # Insight 3: Bundle size optimization
+#     insights.append(
+#         {
+#             "id": 3,
+#             "title": "Bundle Size Optimization",
+#             "description": "Current bundle size (avg. 24 packets) is causing unnecessary delays. Analysis suggests optimal bundle size of 12-15 packets would reduce latency by approximately 40%.",
+#             "severity": "medium",
+#             "impact": "Recommendation",
+#             "type": "recommendation",
+#         }
+#     )
+
+#     # Create correlations
+#     correlations = []
+
+#     # Correlation 1: Packet size vs delay
+#     size_data = []
+#     for size in ["64", "128", "256", "512", "1024"]:
+#         delays = packet_sizes[size]
+#         if delays:
+#             avg_delay = mean(delays)
+#             size_data.append({"size": size, "delay": round(avg_delay)})
+
+#     if len(size_data) > 1:
+#         # Calculate correlation coefficient
+#         sizes = [int(d["size"]) for d in size_data]
+#         delays = [d["delay"] for d in size_data]
+
+#         if len(sizes) == len(delays) and len(sizes) > 1:
+#             # Simple correlation calculation
+#             mean_size = sum(sizes) / len(sizes)
+#             mean_delay = sum(delays) / len(delays)
+
+#             numerator = sum(
+#                 (sizes[i] - mean_size) * (delays[i] - mean_delay)
+#                 for i in range(len(sizes))
+#             )
+#             denominator = math.sqrt(
+#                 sum((size - mean_size) ** 2 for size in sizes)
+#             ) * math.sqrt(sum((delay - mean_delay) ** 2 for delay in delays))
+
+#             correlation = numerator / denominator if denominator != 0 else 0
+
+#             correlations.append(
+#                 {
+#                     "id": 1,
+#                     "title": "Packet Size vs Delay",
+#                     "description": f"Strong positive correlation (r={correlation:.2f}) between packet size and processing delay",
+#                     "data": size_data,
+#                 }
+#             )
+
+#     # Correlation 2: Protocol vs Delay
+#     protocol_data = []
+#     for protocol, delays in protocol_delays.items():
+#         if delays:
+#             avg_delay = mean(delays)
+#             protocol_data.append({"protocol": protocol, "delay": round(avg_delay)})
+
+#     # Find QoS differentials if MQTT is present - FIX HERE FOR ZERO DIVISION ERROR
+#     mqtt_qos = {
+#         d["protocol"]: d["delay"]
+#         for d in protocol_data
+#         if d["protocol"].startswith("MQTT QoS")
+#     }
+
+#     # Check if both QoS types exist before calculating ratio to avoid ZeroDivisionError
+#     if (
+#         "MQTT QoS 0" in mqtt_qos
+#         and "MQTT QoS 2" in mqtt_qos
+#         and mqtt_qos["MQTT QoS 0"] > 0
+#     ):
+#         ratio = mqtt_qos["MQTT QoS 2"] / mqtt_qos["MQTT QoS 0"]
+
+#         correlations.append(
+#             {
+#                 "id": 2,
+#                 "title": "Protocol vs Delay",
+#                 "description": f"MQTT QoS 2 packets show {ratio:.1f}x higher delay than QoS 0 packets",
+#                 "data": protocol_data,
+#             }
+#         )
+#     elif len(protocol_data) >= 2:
+#         # If we don't have both QoS types with non-zero values, still provide correlation data
+#         # but with a more generic description
+#         correlations.append(
+#             {
+#                 "id": 2,
+#                 "title": "Protocol vs Delay",
+#                 "description": "Delay variations observed across different protocols and QoS levels",
+    #             "data": protocol_data,
+    #         }
+    #     )
+
+    # return {"insights": insights, "correlations": correlations}
+
 def get_insights_data(packets):
     """
-    Generate insights from the packet data
-
+    Generate LLM-powered insights from raw packet data using Gemini
+    
     Args:
         packets: List of packet dictionaries
-
+        
     Returns:
         Dictionary containing insights and correlations
     """
     if not packets:
         return {"insights": [], "correlations": []}
+        
+    from datetime import datetime
+    import dpkt
+    
+    def simplify_packets_for_llm(packets, max_packets=1500):
+        """
+        Create a condensed version of packet data suitable for LLM analysis
+        
+        Args:
+            packets: List of packets from process_pcap
+            max_packets: Maximum number of packets to include (for context limits)
+            
+        Returns:
+            List of simplified packet dictionaries
+        """
+        simplified = []
+        
+        for pkt in packets[:max_packets]:
+            # Base information
+            simplified_pkt = {
+                "timestamp": datetime.fromtimestamp(pkt["timestamp"]).strftime('%Y-%m-%d %H:%M:%S'),
+                "protocol": pkt["protocol"],
+                "size": pkt["size"],
+                "source": f"{pkt['src_ip']}:{pkt.get('src_port', 0)}",
+                "destination": f"{pkt['dst_ip']}:{pkt.get('dst_port', 0)}"
+            }
+            
+            # Protocol-specific additions
+            if pkt["protocol"] == "TCP":
+                simplified_pkt.update({
+                    "flags": {
+                        "retransmission": pkt.get("is_retransmission", False),
+                    }
+                })
+                
+            if pkt["protocol"] == "MQTT":
+                simplified_pkt.update({
+                    "mqtt": {
+                        "type": pkt.get("mqtt_type", 0),
+                        "qos": pkt.get("mqtt_qos", 0)
+                    }
+                })
+                
+            # Remove unnecessary fields
+            simplified_pkt.pop("raw_payload", None)
+            
+            simplified.append(simplified_pkt)
+        
+        return simplified
+        
+    packets = simplify_packets_for_llm(packets)
+        
+    FRONTEND = """<div>
+				<h2 className="text-xl font-bold mb-4">Root Cause Analysis</h2>
+				<div className="grid gap-4 md:grid-cols-2">
+					{insightsData.correlations.map(correlation => (
+						<Card key={correlation.id}>
+							<CardHeader>
+								<CardTitle>{correlation.title}</CardTitle>
+								<CardDescription>{correlation.description}</CardDescription>
+							</CardHeader>
+							<CardContent>
+								<ResponsiveContainer width="100%" height={300}>
+									<BarChart
+										data={correlation.data}
+										margin={{
+											top: 5,
+											right: 30,
+											left: 20,
+											bottom: 5,
+										}}
+									>
+										<CartesianGrid strokeDasharray="3 3" />
+										<XAxis dataKey={correlation.id === 1 ? "size" : "protocol"} />
+										<YAxis
+											label={{
+												value: "Delay (ms)",
+												angle: -90,
+												position: "insideLeft",
+											}}
+										/>
+										<Tooltip />
+										<Bar dataKey="delay" fill="#f4735b" />
+									</BarChart>
+								</ResponsiveContainer>
+							</CardContent>
+						</Card>
+					))}
+				</div>
+			</div>"""
 
-    # Track conversations
-    packet_pairs = track_tcp_conversations(packets)
+    # Construct the LLM prompt
+    # print(packets)
+    prompt = f"""Analyze these network packets and generate network insights in exactly this JSON format:
+{json.dumps(packets, indent=2)}
 
-    # Calculate delays and gather data for insights
-    sorted_packets = sorted(packets, key=lambda x: x["timestamp"])
+Output Requirements:
+1. insights (max 3 items) with:
+- id: sequential number
+- title: short problem title
+- description: concise explanation with specific metrics
+- severity: low/medium/high/critical
+- impact: percentage or qualitative
+- type: bottleneck/error/recommendation
 
-    broker_delays = []
-    retransmissions = []
-    packet_sizes = defaultdict(list)
-    protocol_delays = defaultdict(list)
+2. correlations (max 2 items) with:
+- id: sequential number
+- title: correlation title  
+- description: statistical relationship
+- data: supporting metrics
 
-    # Process packets
-    for i, packet in enumerate(sorted_packets):
-        if i == 0:
-            continue
+Look for:
+- Major issues and bottlenecks in the network
+- Broker delays (MQTT PUBLISH/PUBACK timing)
+- Retransmission patterns
+- Packet size vs timing correlations
+- Protocol/QoS performance differences
+- Network congestion patterns
+- The data provided by the correlations should be compatible with the frontend as shown below:
+    {FRONTEND}
 
-        delay = estimate_packet_delay(packet, sorted_packets[i - 1], packet_pairs)
-        protocol = packet["protocol"]
-        size = packet.get("size", 0)
+Example insight: {{
+  "id": 1,
+  "title": "Broker Processing Bottleneck",
+  "description": "Average 250ms delay observed between MQTT PUBLISH (type 3) and PUBACK (type 4) packets",
+  "severity": "high",
+  "impact": "Affects 15% of packets",
+  "type": "bottleneck"
+}}
 
-        # Categorize
-        if delay > 0:
-            # Gather data for broker processing delays
-            if protocol == "MQTT" and packet.get("mqtt_type") in [
-                3,
-                4,
-            ]:  # PUBLISH and PUBACK
-                broker_delays.append({"timestamp": packet["timestamp"], "delay": delay})
+Example correlation: {{
+  "id": 1,
+  "title": "Packet Size vs Delay",
+  "description": "Strong positive correlation (r=0.82) between packet size and processing delay",
+  "data": {{
+    "64B": 120ms,
+    "128B": 150ms, 
+    "256B": 210ms
+  }}
+}}
 
-            # Track retransmissions
-            if protocol == "TCP" and packet.get("is_retransmission", False):
-                retransmissions.append(
-                    {"timestamp": packet["timestamp"], "delay": delay}
-                )
+Return ONLY valid JSON with double quotes. No markdown formatting:"""
+    print("Length of prompt: ", len(prompt))
 
-            # Group by size ranges
-            if size <= 64:
-                packet_sizes["64"].append(delay)
-            elif size <= 128:
-                packet_sizes["128"].append(delay)
-            elif size <= 256:
-                packet_sizes["256"].append(delay)
-            elif size <= 512:
-                packet_sizes["512"].append(delay)
-            else:
-                packet_sizes["1024"].append(delay)
-
-            # Track delays by protocol and QoS for MQTT
-            if protocol == "MQTT":
-                qos = packet.get("mqtt_qos", 0)
-                protocol_delays[f"MQTT QoS {qos}"].append(delay)
-            else:
-                protocol_delays[protocol].append(delay)
-
-    # Create insights list
-    insights = []
-
-    # Insight 1: Check for broker processing bottlenecks
-    if broker_delays:
-        avg_broker_delay = mean([bd["delay"] for bd in broker_delays])
-        broker_percentage = (len(broker_delays) / len(packets)) * 100
-
-        if avg_broker_delay > 250:
-            insights.append(
-                {
-                    "id": 1,
-                    "title": "Broker Processing Bottleneck",
-                    "description": f"Detected significant delays (avg. {round(avg_broker_delay)}ms) during broker processing. This appears to be caused by excessive packet aggregation before forwarding.",
-                    "severity": "high",
-                    "impact": f"Affects {round(broker_percentage)}% of packets",
-                    "type": "bottleneck",
-                }
-            )
-
-    # Insight 2: Check for retransmission spikes
-    if retransmissions:
-        # Group by time to find spikes
-        retrans_by_time = defaultdict(list)
-        for r in retransmissions:
-            time_key = datetime.datetime.fromtimestamp(r["timestamp"]).strftime("%H:%M")
-            retrans_by_time[time_key].append(r)
-
-        # Find periods with high retransmissions
-        spike_periods = [
-            time for time, pkts in retrans_by_time.items() if len(pkts) > 5
-        ]
-
-        if spike_periods:
-            retrans_percentage = (len(retransmissions) / len(packets)) * 100
-            max_delay = max([r["delay"] for r in retransmissions])
-
-            insights.append(
-                {
-                    "id": 2,
-                    "title": "Retransmission Spikes",
-                    "description": f"Multiple retransmission events detected between {spike_periods[0] if spike_periods else '00:00'}-{spike_periods[-1] if spike_periods else '00:00'}, indicating network congestion or packet loss. This is causing delays of up to {max_delay/1000:.1f}s for affected packets.",
-                    "severity": "critical",
-                    "impact": f"Affects {round(retrans_percentage)}% of packets",
-                    "type": "error",
-                }
-            )
-
-    # Insight 3: Bundle size optimization
-    insights.append(
-        {
-            "id": 3,
-            "title": "Bundle Size Optimization",
-            "description": "Current bundle size (avg. 24 packets) is causing unnecessary delays. Analysis suggests optimal bundle size of 12-15 packets would reduce latency by approximately 40%.",
-            "severity": "medium",
-            "impact": "Recommendation",
-            "type": "recommendation",
+    try:
+        # Get Gemini response
+        response = model.generate_content(prompt)
+        cleaned = response.text.strip().replace('```json', '').replace('```', '')
+        
+        # Parse and validate
+        result = json.loads(cleaned)
+        
+        # Convert data values to numeric if needed
+        for corr in result.get('correlations', []):
+            if isinstance(corr['data'], dict):
+                for k, v in corr['data'].items():
+                    if isinstance(v, str) and 'ms' in v:
+                        corr['data'][k] = float(v.replace('ms', '').strip())
+        
+        return {
+            "insights": result.get("insights", [])[:3],
+            "correlations": result.get("correlations", [])[:2]
         }
-    )
-
-    # Create correlations
-    correlations = []
-
-    # Correlation 1: Packet size vs delay
-    size_data = []
-    for size in ["64", "128", "256", "512", "1024"]:
-        delays = packet_sizes[size]
-        if delays:
-            avg_delay = mean(delays)
-            size_data.append({"size": size, "delay": round(avg_delay)})
-
-    if len(size_data) > 1:
-        # Calculate correlation coefficient
-        sizes = [int(d["size"]) for d in size_data]
-        delays = [d["delay"] for d in size_data]
-
-        if len(sizes) == len(delays) and len(sizes) > 1:
-            # Simple correlation calculation
-            mean_size = sum(sizes) / len(sizes)
-            mean_delay = sum(delays) / len(delays)
-
-            numerator = sum(
-                (sizes[i] - mean_size) * (delays[i] - mean_delay)
-                for i in range(len(sizes))
-            )
-            denominator = math.sqrt(
-                sum((size - mean_size) ** 2 for size in sizes)
-            ) * math.sqrt(sum((delay - mean_delay) ** 2 for delay in delays))
-
-            correlation = numerator / denominator if denominator != 0 else 0
-
-            correlations.append(
-                {
-                    "id": 1,
-                    "title": "Packet Size vs Delay",
-                    "description": f"Strong positive correlation (r={correlation:.2f}) between packet size and processing delay",
-                    "data": size_data,
-                }
-            )
-
-    # Correlation 2: Protocol vs Delay
-    protocol_data = []
-    for protocol, delays in protocol_delays.items():
-        if delays:
-            avg_delay = mean(delays)
-            protocol_data.append({"protocol": protocol, "delay": round(avg_delay)})
-
-    # Find QoS differentials if MQTT is present - FIX HERE FOR ZERO DIVISION ERROR
-    mqtt_qos = {
-        d["protocol"]: d["delay"]
-        for d in protocol_data
-        if d["protocol"].startswith("MQTT QoS")
-    }
-
-    # Check if both QoS types exist before calculating ratio to avoid ZeroDivisionError
-    if (
-        "MQTT QoS 0" in mqtt_qos
-        and "MQTT QoS 2" in mqtt_qos
-        and mqtt_qos["MQTT QoS 0"] > 0
-    ):
-        ratio = mqtt_qos["MQTT QoS 2"] / mqtt_qos["MQTT QoS 0"]
-
-        correlations.append(
-            {
-                "id": 2,
-                "title": "Protocol vs Delay",
-                "description": f"MQTT QoS 2 packets show {ratio:.1f}x higher delay than QoS 0 packets",
-                "data": protocol_data,
-            }
-        )
-    elif len(protocol_data) >= 2:
-        # If we don't have both QoS types with non-zero values, still provide correlation data
-        # but with a more generic description
-        correlations.append(
-            {
-                "id": 2,
-                "title": "Protocol vs Delay",
-                "description": "Delay variations observed across different protocols and QoS levels",
-                "data": protocol_data,
-            }
-        )
-
-    return {"insights": insights, "correlations": correlations}
-
+        
+    except Exception as e:
+        print(f"LLM analysis failed: {str(e)}")
+        return {"insights": [], "correlations": []}
 
 # Fix for the 'src_port' KeyError in process_pcap function
 def process_pcap(file_path):
@@ -1033,4 +1219,10 @@ async def get_packets(
 
 
 if __name__ == "__main__":
-    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
+    # uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
+    
+    # Testing LLM
+    packets = process_pcap("sample2.pcapng")
+    insights_data = get_insights_data(packets)
+    
+    print(insights_data)
