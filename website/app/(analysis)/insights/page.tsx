@@ -4,10 +4,21 @@ import { AlertCircle, AlertTriangle, Info } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts"
+import { useEffect, useState } from "react"
 
-const insightsData = JSON.parse(localStorage.getItem("analysisResults") || "{}").insightsData
 
 export default function InsightsPage() {
+	const [insightsData, setInsightsData] = useState(null)
+
+	useEffect(() => {
+		const analysisResults = JSON.parse(localStorage.getItem("analysisResults") || "{}")
+		setInsightsData(analysisResults.insightsData || {})
+	}, [])
+
+	if (!insightsData) {
+		return <div>Loading...</div>
+	}
+
 	const getSeverityColor = (severity: string) => {
 		switch (severity) {
 			case "critical":
@@ -67,10 +78,10 @@ export default function InsightsPage() {
 											{insight.severity === "critical"
 												? "Critical"
 												: insight.severity === "high"
-													? "High Impact"
-													: insight.severity === "medium"
-														? "Medium Impact"
-														: "Low Impact"}
+												? "High Impact"
+												: insight.severity === "medium"
+												? "Medium Impact"
+												: "Low Impact"}
 										</Badge>
 										<Badge variant="outline">{insight.impact}</Badge>
 									</div>

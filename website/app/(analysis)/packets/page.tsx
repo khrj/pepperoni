@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { MoreHorizontal } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -18,13 +18,22 @@ import {
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 
-const packetData = JSON.parse(localStorage.getItem("analysisResults") || "{}").packetData
-
 export default function PacketsPage() {
 	const [selectedProtocol, setSelectedProtocol] = useState("all")
 	const [selectedDelay, setSelectedDelay] = useState("all")
 	const [currentPage, setCurrentPage] = useState(1)
 	const [selectedPacket, setSelectedPacket] = useState<any>(null)
+
+	const [packetData, setPacketData] = useState(null)
+
+	useEffect(() => {
+		const analysisResults = JSON.parse(localStorage.getItem("analysisResults") || "{}")
+		setPacketData(analysisResults.packetData || {})
+	}, [])
+
+	if (!packetData) {
+		return <div>Loading...</div>
+	}
 
 	const itemsPerPage = 10
 
@@ -209,8 +218,8 @@ export default function PacketsPage() {
 											{selectedPacket.delay > 300
 												? "High"
 												: selectedPacket.delay > 200
-													? "Medium"
-													: "Low"}
+												? "Medium"
+												: "Low"}
 										</span>
 									</div>
 								</div>
