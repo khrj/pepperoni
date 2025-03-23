@@ -20,12 +20,16 @@ import time
 
 from redis_cache import RedisCache, calculate_file_checksum
 
-import google.generativeai as genai
+# import google.generativeai as genai
 from datetime import datetime
 
 # Configure Gemini
-genai.configure(api_key="AIzaSyBH1e_YkXGL-sngYqpHSpvV1PQw-YJltOk")
-model = genai.GenerativeModel('gemini-2.0-flash')
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="AIzaSyBH1e_YkXGL-sngYqpHSpvV1PQw-YJltOk",
+    base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
+)
 
 # Create Redis cache instance
 # These settings can be moved to environment variables or config file
@@ -797,12 +801,23 @@ Example correlation: {{
 }}
 
 Return ONLY valid JSON with double quotes. No markdown formatting:"""
-    print("Length of prompt: ", len(prompt))
+    # print("Length of prompt: ", len(prompt))
 
     try:
         # Get Gemini response
-        response = model.generate_content(prompt)
-        cleaned = response.text.strip().replace('```json', '').replace('```', '')
+        response = client.chat.completions.create(
+            model="gemini-2.0-flash",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        )
+        
+        response = response.choices[0].message.content
+        cleaned = response.strip().replace('```json', '').replace('```', '')
         
         # Parse and validate
         result = json.loads(cleaned)
