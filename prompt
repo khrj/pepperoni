@@ -1,0 +1,24 @@
+Context
+In IoT applications (e.g., medical devices transmitting ECG data), edge devices often send small packets to an MQTT broker, which aggregates them into bundles for efficient cloud storage. However, delays occur at multiple stages, a few examples being Device-to-Broker (Waiting for enough packets to form a bundle), Broker Processing (Time to aggregate, compress, or encrypt packets), Cloud Upload (Transmission delays during bulk uploads), Retransmissions (Lost packets requiring resending), etc.
+These delays cascade and degrade performance for time-sensitive applications (e.g., real-time health monitoring).
+Your Task:
+Develop an application that automatically analyzes network packet logs to detect and categorize different types of transmission delays in MQTT-based IoT workflows. Given a .pcapng file (captured using tools like Wireshark or tcpdump), your solution should extract meaningful insights regarding:
+
+Types of Delays: Identify root causes for packet delays and categorize
+Time Dashboards: Calculate and visualize transmission latency for different packet types (MQTT, TCP, UDP, etc.)
+Patterns & Anomalies: Detect irregular delay patterns that may indicate issues like network congestion, jitter, or inefficient packet aggregation.
+
+Build an end-to-end GUI that allows users to seamlessly upload and analyze packet capture files, visualize delay trends, and categorize delays. The GUI should include:
+
+File Upload & Summary: Users can upload .pcapng files and view an overview of packet count, protocols, and timestamps.
+Delay Analysis Dashboard: Displays key metrics such as average latency, packet loss percentage, and protocol distribution.
+Delay Categorization & Insights: Automatically classifies delays into different categories (e.g., bundling delays, broker processing delays, retransmissions) with visual indicators.
+Interactive Timeline & Graphs: Provides a visual representation of packet delays, highlighting anomalies and congestion events.
+Advanced Filtering & Search: Users can filter packets by protocol, IP, port, or delay thresholds to focus on critical issues.
+
+Bonus Points (Advanced Features):
+
+Visual dashboards showing latency trends, jitter, and congestion insights.
+Root cause analysis by correlating delays with factors such as packet size, protocol type or source/destination.
+
+This application will serve as a valuable tool for networking professionals and researchers to diagnose performance bottlenecks in IoT networks and optimize real-time data transmission.
