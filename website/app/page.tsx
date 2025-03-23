@@ -65,7 +65,7 @@ export default function UploadPage() {
 			const formData = new FormData()
 			formData.append("pcap_file", file)
 
-			const response = await fetch("http://localhost:8000/analyze", {
+			const response = await fetch("https://pepperoni.khushrajrathod.com/analyze", {
 				method: "POST",
 				body: formData,
 			})
