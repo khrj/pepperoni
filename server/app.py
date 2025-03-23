@@ -198,7 +198,7 @@ def get_summary_data(packets, baseline_packets=None):
         "avgLatency": avg_latency,
         "packetLoss": packet_loss,
         "jitter": jitter,
-        "num_packets": len(packets),
+        "numPackets": len(packets),
     }
 
     # Process baseline data if provided
@@ -955,6 +955,7 @@ async def analyze_pcap_file(
         if baseline_path:
             os.unlink(baseline_path)
 
+        save_analysis_to_json(analysis_results, "analysis_results.json")
         return JSONResponse(content=analysis_results)
 
     except Exception as e:

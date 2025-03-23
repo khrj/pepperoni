@@ -188,11 +188,11 @@ export default function PacketsPage() {
 									</div>
 									<div className="grid grid-cols-3 gap-2">
 										<span className="text-sm font-medium">Source:</span>
-										<span className="col-span-2 text-sm">{selectedPacket.source}</span>
+										<span className="col-span-4 text-sm">{selectedPacket.source}</span>
 									</div>
 									<div className="grid grid-cols-3 gap-2">
 										<span className="text-sm font-medium">Destination:</span>
-										<span className="col-span-2 text-sm">{selectedPacket.destination}</span>
+										<span className="col-span-4 text-sm">{selectedPacket.destination}</span>
 									</div>
 									<div className="grid grid-cols-3 gap-2">
 										<span className="text-sm font-medium">Size:</span>
@@ -223,18 +223,6 @@ export default function PacketsPage() {
 										</span>
 									</div>
 								</div>
-							</div>
-
-							<div className="col-span-1 md:col-span-2">
-								<h3 className="mb-2 font-semibold">Packet Payload</h3>
-								<pre className="max-h-40 overflow-auto rounded-md border bg-muted p-4 text-xs">
-									{`00000000  16 03 03 00 5a 02 00 00  56 03 03 a6 af 06 c2 c1  |....Z...V.......|
-00000010  59 cb 3f 57 8f 93 5d 05  e2 79 4b 86 aa 8f 15 74  |Y.?W..]..yK....t|
-00000020  f2 c0 1b 05 5f 5f 00 00  06 13 01 13 03 13 02 01  |....__.........|
-00000030  00 00 27 00 23 00 00 00  0d 00 20 00 1e 06 01 06  |..'.#..... .....|
-00000040  03 ef f0 c0 c1 49 98 d7  e7 31 37 de b2 38 61 a3  |.....I...17..8a.|
-00000050  0d 4c 8e 5e b8 46 fa 94  f9 0a                    |.L.^.F....|`}
-								</pre>
 							</div>
 						</div>
 					)}

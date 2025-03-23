@@ -59,8 +59,7 @@ export default function DashboardPage() {
 							<h3 className="text-sm font-medium">Average Latency</h3>
 							<p className="text-3xl font-bold">{summaryData.avgLatency} ms</p>
 							<p className="text-xs text-muted-foreground">
-								{/* {((summaryData.avgLatency / summaryData.baseline.avgLatency - 1) * 100).toFixed(1)}% */}
-								from baseline
+								Time taken for packets to travel between source and destination
 							</p>
 							<div className="h-2 bg-muted rounded-full overflow-hidden">
 								<div
@@ -80,8 +79,7 @@ export default function DashboardPage() {
 							<h3 className="text-sm font-medium">Packet Loss</h3>
 							<p className="text-3xl font-bold">{summaryData.packetLoss}%</p>
 							<p className="text-xs text-muted-foreground">
-								{/* {((summaryData.packetLoss / summaryData.baseline.packetLoss - 1) * 100).toFixed(1)}% */}
-								from baseline
+								Percentage of packets that fail to reach destination.
 							</p>
 							<div className="h-2 bg-muted rounded-full overflow-hidden">
 								<div
@@ -100,10 +98,7 @@ export default function DashboardPage() {
 						<div className="space-y-2">
 							<h3 className="text-sm font-medium">Jitter</h3>
 							<p className="text-3xl font-bold">{summaryData.jitter} ms</p>
-							<p className="text-xs text-muted-foreground">
-								{/* {((summaryData.jitter / summaryData.baseline.jitter - 1) * 100).toFixed(1)}% from */}
-								baseline
-							</p>
+							<p className="text-xs text-muted-foreground">Variation in packet delay over time.</p>
 							<div className="h-2 bg-muted rounded-full overflow-hidden">
 								<div
 									className="h-full bg-primary"
@@ -146,10 +141,10 @@ export default function DashboardPage() {
 												entry.name === "MQTT"
 													? COLORS.mqtt
 													: entry.name === "TCP"
-														? COLORS.tcp
-														: entry.name === "UDP"
-															? COLORS.udp
-															: COLORS.dns
+													? COLORS.tcp
+													: entry.name === "UDP"
+													? COLORS.udp
+													: COLORS.dns
 											}
 										/>
 									))}
@@ -188,10 +183,10 @@ export default function DashboardPage() {
 												entry.name === "Broker Processing"
 													? COLORS.brokerProcessing
 													: entry.name === "Network"
-														? COLORS.network
-														: entry.name === "Bundling Delay"
-															? COLORS.bundlingDelay
-															: COLORS.retransmission
+													? COLORS.network
+													: entry.name === "Bundling Delay"
+													? COLORS.bundlingDelay
+													: COLORS.retransmission
 											}
 										/>
 									))}

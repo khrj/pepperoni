@@ -17,6 +17,13 @@ export default function AnalysisLayout({ children }: { children: React.ReactNode
 	const { theme, setTheme } = useTheme()
 	const [mounted, setMounted] = useState(false)
 
+	const [analysisResults, setAnalysisResults] = useState(null)
+
+	useEffect(() => {
+		const analysisResults = JSON.parse(localStorage.getItem("analysisResults") || "{}")
+		setAnalysisResults(analysisResults)
+	}, [])
+
 	// Avoid hydration mismatch
 	useEffect(() => {
 		setMounted(true)
@@ -74,11 +81,12 @@ export default function AnalysisLayout({ children }: { children: React.ReactNode
 						>
 							Analysis Complete
 						</Badge>
-						<Badge variant="outline">1,245 Packets</Badge>
-						<Badge variant="outline">4 Protocols</Badge>
-						<Button variant="outline" size="sm" onClick={handleExportReport}>
-							Export Report
-						</Button>
+						{analysisResults && (
+							<>
+								<Badge variant="outline">{analysisResults.summaryData.numPackets} Packets</Badge>
+								<Badge variant="outline">{analysisResults.protocolDistribution.length} Protocols</Badge>
+							</>
+						)}
 						<Button
 							variant="outline"
 							size="sm"
@@ -131,18 +139,6 @@ export default function AnalysisLayout({ children }: { children: React.ReactNode
 							Insights
 						</Button>
 					</div>
-
-					{pathname === "/packets" ? (
-						<div className="flex items-center gap-2">
-							<div className="relative">
-								<Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-								<Input type="search" placeholder="Search packets..." className="pl-8 w-[250px]" />
-							</div>
-							<Button variant="outline" size="icon">
-								<Filter className="h-4 w-4" />
-							</Button>
-						</div>
-					) : null}
 				</div>
 
 				{children}
