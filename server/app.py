@@ -1066,6 +1066,7 @@ def analyze_pcap(file_path, baseline_file=None):
         "delayTimeline": delay_timeline,
         "insightsData": insights_data,
         "packetData": packet_display_data,
+        "all_packets": packets
     }
 
 
@@ -1150,6 +1151,10 @@ async def analyze_pcap_file(
         print("Saving analysis to cache...")
         redis_cache.store_analysis(file_checksum, file_id, analysis_results)
 
+
+        # Remove the 'all_packets' key from the response
+        analysis_results.pop("all_packets")
+
         # Clean up temporary files
         print("Cleaning temp files")
         os.unlink(pcap_path)
@@ -1227,7 +1232,7 @@ async def get_packets(
         return {"message": "file_id required"}
     cached_analysis = redis_cache.get_analysis_file_id(file_id)
     if cached_analysis:
-        packets = cached_analysis["analysis_results"]["packetData"]
+        packets = cached_analysis["analysis_results"]["all_packets"]
         return packets[start_index : start_index + num_packets]
     else:
         return {"message": "Analysis not found in cache"}
