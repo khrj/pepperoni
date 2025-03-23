@@ -13,7 +13,7 @@ import dpkt
 import socket
 import datetime
 from collections import Counter, defaultdict
-import math
+import random
 import json
 from statistics import mean
 import time
@@ -22,9 +22,11 @@ from redis_cache import RedisCache, calculate_file_checksum
 
 # Configure Gemini
 from openai import OpenAI
+from dotenv import load_dotenv
+load_dotenv()
 
 client = OpenAI(
-    api_key="AIzaSyBH1e_YkXGL-sngYqpHSpvV1PQw-YJltOk",
+    api_key=os.getenv('GEMINI_KEY'),
     base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
 )
 
@@ -789,7 +791,7 @@ def get_packet_data(packets, limit=100):
         # Use a random delay value since we can't accurately compute it without pairing
         delay = int(size / 10) + (
             50 if protocol == "MQTT" else 30
-        )  # Simplified delay estimate
+        )  + int(random.random() * 20) # Simplified delay estimate
 
         raw_payload = packet.get("raw_payload", "")
 
