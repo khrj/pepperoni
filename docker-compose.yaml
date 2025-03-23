@@ -4,3 +4,13 @@ services:
     ports:
       - "6379:6379"
     restart: always
+
+  server:
+    build:
+        context: .
+        dockerfile: server/Dockerfile
+    restart: always
+    environment:
+        - GEMINI_KEY=${GEMINI_KEY}
+    ports:
+        - "80:8000"
