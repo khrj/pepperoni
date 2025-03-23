@@ -44,7 +44,7 @@ Ensure you have the following installed:
    ```bash
    echo "GEMINI_API_KEY=your_api_key_here" > .env
    ```
-4. Run the backend server:
+4. Run the backend server ( Ensure [redis](https://wiki.archlinux.org/title/Redis) is running):
    ```bash
    poetry run python app.py
    ```
@@ -92,6 +92,22 @@ pepperoni/
 │   ├── tsconfig.json     # TypeScript configuration
 │   ├── bun.lock          # Bun lock file
 ```
+
+## Running unit tests
+
+1. Navigate to the website directory:
+   ```bash
+   cd server
+   ```
+2. Install dependencies using Poetry:
+   ```bash
+   poetry install
+   ```
+3. Run the tests:
+   ```bash
+    python -m unittest tests/test_pcap_analyze.py
+   ```
+
 
 ## Contribution
 
