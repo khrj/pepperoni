@@ -3,6 +3,7 @@ import tempfile
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+import uuid
 import uvicorn
 from typing import Optional
 
@@ -13,11 +14,19 @@ import datetime
 from collections import Counter, defaultdict
 import math
 import json
-import ipaddress
-import struct
-from statistics import mean, stdev
+from statistics import mean
 import time
 
+from redis_cache import RedisCache, calculate_file_checksum
+
+# Create Redis cache instance
+# These settings can be moved to environment variables or config file
+redis_cache = RedisCache(
+    host=os.getenv("REDIS_HOST", "localhost"),
+    port=int(os.getenv("REDIS_PORT", "6379")),
+    password=os.getenv("REDIS_PASSWORD", None),
+    expiration_time=int(os.getenv("REDIS_EXPIRATION", "86400")),  # 24 hours
+)
 
 def load_pcap(file_path):
     """
@@ -894,6 +903,18 @@ async def analyze_pcap_file(
             temp_pcap.write(await pcap_file.read())
             pcap_path = temp_pcap.name
 
+        # Calculate checksum for the file
+        file_checksum = calculate_file_checksum(pcap_path)
+        
+        # Check if analysis already exists in cache
+        cached_analysis = redis_cache.get_analysis(file_checksum)
+        if cached_analysis:
+            # Clean up the temp file
+            os.unlink(pcap_path)
+            
+            print(f"Cache hit for checksum: {file_checksum}")
+            return JSONResponse(content=cached_analysis["analysis_results"])
+
         baseline_path = None
         if baseline_file:
             with tempfile.NamedTemporaryFile(
@@ -905,7 +926,13 @@ async def analyze_pcap_file(
         # Analyze the PCAP file
         analysis_results = analyze_pcap(pcap_path, baseline_path)
 
+        # Store the analysis results in cache
+        file_id = str(uuid.uuid4())
+        print("Saving analysis to cache...")
+        redis_cache.store_analysis(file_checksum, file_id, analysis_results)
+
         # Clean up temporary files
+        print("Cleaning temp files")
         os.unlink(pcap_path)
         if baseline_path:
             os.unlink(baseline_path)
