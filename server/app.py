@@ -28,6 +28,7 @@ redis_cache = RedisCache(
     expiration_time=int(os.getenv("REDIS_EXPIRATION", "86400")),  # 24 hours
 )
 
+
 def load_pcap(file_path):
     """
     Load a pcap file and return a file object
@@ -669,6 +670,7 @@ def process_pcap(file_path):
                     "protocol": "OTHER",
                     "src_port": 0,  # Initialize with defaults
                     "dst_port": 0,  # Initialize with defaults
+                    "raw_payload": buf.hex(),  # Store the raw payload as hex
                 }
 
                 # Extract IP addresses
@@ -788,6 +790,15 @@ def get_packet_data(packets, limit=100):
             50 if protocol == "MQTT" else 30
         )  # Simplified delay estimate
 
+        raw_payload = packet.get("raw_payload", "")
+
+        formatted_payload = ""
+        if raw_payload:
+            for i in range(0, len(raw_payload), 32):
+                chunk = raw_payload[i : i + 32]
+                offset = f"0x{i//2:08x}"  # Display offset in bytes
+                formatted_payload += f"{offset}  {' '.join(chunk[j:j+2] for j in range(0, len(chunk), 2))}\n"
+
         formatted_packets.append(
             {
                 "id": packet["id"],
@@ -797,7 +808,8 @@ def get_packet_data(packets, limit=100):
                 "protocol": packet["protocol"],
                 "size": size,
                 "delay": delay,
-                "delayCategory": delay_category,
+                "hexPayload": raw_payload,  # Include the raw hex payload
+                "formattedPayload": formatted_payload,  # Include formatted payload for display   "delayCategory": delay_category,
             }
         )
 
@@ -903,13 +915,13 @@ async def analyze_pcap_file(
 
         # Calculate checksum for the file
         file_checksum = calculate_file_checksum(pcap_path)
-        
+
         # Check if analysis already exists in cache
         cached_analysis = redis_cache.get_analysis(file_checksum)
         if cached_analysis:
             # Clean up the temp file
             os.unlink(pcap_path)
-            
+
             print(f"Cache hit for checksum: {file_checksum}")
             return JSONResponse(content=cached_analysis["analysis_results"])
 
