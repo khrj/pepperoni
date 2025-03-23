@@ -922,13 +922,13 @@ async def analyze_pcap_file(
         file_checksum = calculate_file_checksum(pcap_path)
 
         # Check if analysis already exists in cache
-        cached_analysis = redis_cache.get_analysis(file_checksum)
-        if cached_analysis:
-            # Clean up the temp file
-            os.unlink(pcap_path)
-
-            print(f"Cache hit for checksum: {file_checksum}")
-            return JSONResponse(content=cached_analysis["analysis_results"])
+        # cached_analysis = redis_cache.get_analysis(file_checksum)
+        # if cached_analysis:
+        #     # Clean up the temp file
+        #     os.unlink(pcap_path)
+        #
+        #     print(f"Cache hit for checksum: {file_checksum}")
+        #     return JSONResponse(content=cached_analysis["analysis_results"])
 
         baseline_path = None
         if baseline_file:
