@@ -275,13 +275,13 @@ def categorize_delays(packets):
     return sorted(categories, key=lambda x: x["value"], reverse=True)
 
 
-def get_latency_trends(packets, interval_mins=10):
+def get_latency_trends(packets, interval_secs=10):
     """
     Calculate latency trends over time for different protocols
 
     Args:
         packets: List of packet dictionaries
-        interval_mins: Time interval in minutes for grouping data
+        interval_secs: Time interval in seconds for grouping data
 
     Returns:
         List of dictionaries with time and protocol latencies
@@ -300,12 +300,11 @@ def get_latency_trends(packets, interval_mins=10):
     end_time = sorted_packets[-1]["timestamp"]
 
     # Create time intervals
-    interval_seconds = interval_mins * 60
     intervals = []
 
     current_time = start_time
     while current_time <= end_time:
-        interval_end = current_time + interval_seconds
+        interval_end = current_time + interval_secs
 
         # Group packets in this interval
         interval_packets = [
@@ -329,7 +328,7 @@ def get_latency_trends(packets, interval_mins=10):
                     tcp_delays.append(delay)
 
         # Format time
-        time_str = datetime.datetime.fromtimestamp(current_time).strftime("%H:%M")
+        time_str = datetime.datetime.fromtimestamp(current_time).strftime("%H:%M:%S")
         interval_data = {"time": time_str}
 
         if mqtt_delays:
@@ -344,13 +343,13 @@ def get_latency_trends(packets, interval_mins=10):
     return intervals
 
 
-def get_delay_timeline(packets, interval_mins=10):
+def get_delay_timeline(packets, interval_secs=10):
     """
     Calculate delay timeline for multiple protocols
 
     Args:
         packets: List of packet dictionaries
-        interval_mins: Time interval in minutes for grouping data
+        interval_secs: Time interval in seconds for grouping data
 
     Returns:
         List of dictionaries with time and protocol delays
@@ -369,12 +368,11 @@ def get_delay_timeline(packets, interval_mins=10):
     end_time = sorted_packets[-1]["timestamp"]
 
     # Create time intervals
-    interval_seconds = interval_mins * 60
     intervals = []
 
     current_time = start_time
     while current_time <= end_time:
-        interval_end = current_time + interval_seconds
+        interval_end = current_time + interval_secs
 
         # Group packets in this interval
         interval_packets = [
@@ -401,7 +399,7 @@ def get_delay_timeline(packets, interval_mins=10):
                     udp_delays.append(delay)
 
         # Format time
-        time_str = datetime.datetime.fromtimestamp(current_time).strftime("%H:%M")
+        time_str = datetime.datetime.fromtimestamp(current_time).strftime("%H:%M:%S")
         interval_data = {"time": time_str}
 
         if mqtt_delays:
